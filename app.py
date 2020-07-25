@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask,render_template
 from flask_mysqldb import MySQL
+
 
 app = Flask(__name__)
 app.config['MYSQL_USER'] = 'sql3356970'
@@ -12,5 +13,6 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
+
     cur = mysql.connection.cursor()
-    return 'Done!'
+    return render_template("index.html")
