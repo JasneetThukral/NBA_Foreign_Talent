@@ -15,4 +15,4 @@ mysql = MySQL(app)
 def index():
 
     cur = mysql.connection.cursor()
-    return render_template("index.html")
+    return render_template('templates/index.html')
