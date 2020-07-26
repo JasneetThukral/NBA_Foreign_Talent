@@ -1,8 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request
 from flask_mysqldb import MySQL
 
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='templates')
 app.config['MYSQL_USER'] = 'sql3356970'
 app.config['MYSQL_PASSWORD'] = 'gAgxITG1pb'
 app.config['MYSQL_HOST'] = 'sql3.freemysqlhosting.net'
@@ -10,28 +10,34 @@ app.config['MYSQL_DB'] = 'sql3356970'
 app.config['MYSQL_CURSURCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
+table = ""
 
-class Players(db.Model):
-    PlayerID = db.Column(db.Integer, primary_key=True)
-    PlayerName = db.Column(db.String(550), nullable=False)
-    TeamName = db.Column(db.String(300), db.ForeignKey(Teams.TeamName), nullable=False)
-    Positions = db.Column(db.String(10), nullable=False)
-    Height = db.Column(db.Integer, nullable=False)
-    Weight = db.Column(db.Integer, nullable=False)
+@app.route('/', methods=['GET', 'POST'])
 
-class Teams(db.Model):
-    pass
-
-class Statistics(db.Model):
-    PlayerID = db.Column(db.Integer, db.ForeignKey(Players.PlayerID))
-    numGames = db.Column(db.Integer, nullable=False)
-    
-
-class Leagues(db.Model):
-    LeagueName = db.Column(db.String(250), unique=True, nullable=False)
-    NumGames = db.Column(db.Integer)
-
-@app.route('/')
 def index():
-    cur = mysql.connection.cursor()
+    if request.method == "POST":
+        details = request.form
+        query = details['statement']
+        table = details['table']
+        cur = mysql.connection.cursor()
+        row = cur.execute(query)
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
+        mysql.connection.commit()
+        cur.close()
+        print(query)
     return render_template('index.html')
+
+
+@app.route('/results',methods=['GET', 'POST'])
+def script_output():
+    cur = mysql.connection.cursor()
+    # if str(table) == "Players":
+    print(table)
+    cur.execute("SELECT * FROM Players")
+    rows = cur.fetchall()
+    print(rows)
+    return render_template('results.html',output=rows)
+if __name__ == 'main':
+    app.run(debug=True)
