@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask, render_template
 from flask_mysqldb import MySQL
 
 
@@ -13,6 +13,5 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-
     cur = mysql.connection.cursor()
-    return render_template('templates/index.html')
+    return render_template('index.html')

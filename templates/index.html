@@ -11,33 +11,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- <link rel="stylesheet" href="C:\Users\wajid\Downloads\Fantasy-Basketball\static\css"/> -->
 		<link rel="stylesheet" type = "text/css" href="{{url_for('static',filename='static/css/main.css')}}" />
-        
-        
-        
-        
+		<style>
+		.dropbtn {
+			background-color: white;
+			color: white;
+			padding: 16px;
+			font-size: 16px;
+			border: none;
+			cursor: pointer;
+		}
+
+		.dropdown-left {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 100px;
+		top: 800px;
+
+		}
+
+		.dropdown-right {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 300px;
+				top: 800px;
+		}
+
+		.dropdown-one {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 500px;
+			top: 800px;
+
+		}
+
+		.dropdown-two {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 700px;
+				top: 800px;
+		}
+
+		.dropdown-three {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 850px;
+			top: 800px;
+
+		}
+
+		.dropdown-four {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 950px;
+			top: 800px;
+		}
+
+		.dropdown-c {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 100px;
+			top: 1000px;
+
+		}
+
+		.dropdown-d {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 300px;
+			top: 1000px;
+		}
+
+		.dropdown-e {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 500px;
+			top: 1000px;
+
+		}
+
+		.dropdown-f {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 100px;
+			top: 1200px;
+		}
+
+		.dropdown-g {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 300px;
+			top: 1200px;
+		}
+
+		 .dropdown-h {
+			position: absolute;
+			display: inline-block;
+			height: 50px;
+			width: 250px;
+			left: 100px;
+			top: 1400px;
+		}
+
+
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			right: 0;
+			background-color: #f9f9f9;
+			min-width: 160px;
+			box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+			z-index: 1;
+		}
+
+		.dropdown-content a {
+			color: black;
+			padding: 12px 16px;
+			text-decoration: none;
+			display: block;
+		}
+
+		.container {
+					text-align: center;
+
+		}
+		.dropdown-content a:hover {background-color: #f1f1f1;}
+		</style>
+
 	</head>
 	<body>
 
 		<!-- Header -->
 			<header id="header" class="alt">
 				<div class="inner">
-					<h1>NB SCOUTING</h1>
+					<h1>NBA SCOUTING</h1>
 					<p> Search for International Talent </p>
 				</div>
 			</header>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
-                
+
 
 				<!-- Banner -->
 					<section id="intro" class="main">
-					
+
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae<br />
 						malesuada turpis. Nam pellentesque in ac aliquam. Aliquam tempor<br />
 						mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
                             porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
-                            porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem 
+                            porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem
                             .
                             porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
                             porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
@@ -45,8 +189,8 @@
                             porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
                             porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem ipsum dolor.mi porta egestas maximus lorem .
                         </p>
-                        
-        
+
+
                             <div class="dropdown-left" >
                               <button onclick="myFunction()" class="dropbtn">PID</button>
                                 <script>
@@ -54,7 +198,7 @@
                                   var create_pid = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
+                            </div>
 
                             <div class="dropdown-right">
                               <button onclick="myFunction()" class="dropbtn">Name</button>
@@ -64,7 +208,7 @@
                                 }
                                 </script>
                             </div>
-                        
+
                         <div class="dropdown-one">
                               <button onclick="myFunction()" class="dropbtn">Team</button>
                                 <script>
@@ -72,7 +216,7 @@
                                   var create_team = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
+                            </div>
 
                             <div class="dropdown-two">
                               <button onclick="myFunction()" class="dropbtn">Position</button>
@@ -82,7 +226,7 @@
                                 }
                                 </script>
                             </div>
-                        
+
                            <div class="dropdown-three">
                               <button onclick="myFunction()" class="dropbtn">Ht</button>
                                 <script>
@@ -90,7 +234,7 @@
                                   var create_ht = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
+                            </div>
 
                             <div class="dropdown-four">
                               <button onclick="myFunction()" class="dropbtn">Wt</button>
@@ -108,7 +252,7 @@
                                   var update_player = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
+                            </div>
 
                             <div class="dropdown-d">
                               <button onclick="myFunction()" class="dropbtn">Teams</button>
@@ -126,9 +270,9 @@
                                   var update_wt = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
-                        
-                        
+                            </div>
+
+
                          <div class="dropdown-f">
                               <button onclick="myFunction()" class="dropbtn">Teams</button>
                                 <script>
@@ -145,8 +289,8 @@
                                   var delete_players = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                            </div> 
-                        
+                            </div>
+
                           <div class="dropdown-h">
                               <button onclick="myFunction()" class="dropbtn">Teams</button>
                                 <script>
@@ -154,9 +298,9 @@
                                   var read_teams = prompt("Please Enter the Value:");
                                 }
                                 </script>
-                          </div> 
-                        
-                        
+                          </div>
+
+
 					</section>
 
 				<!-- Items -->
@@ -203,7 +347,7 @@
 						</article>
 					</section>
 
-			
+
 
 				<!-- Main -->
 				<!--
