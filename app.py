@@ -10,7 +10,6 @@ app.config['MYSQL_DB'] = 'sql3356970'
 app.config['MYSQL_CURSURCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
-table = ""
 
 @app.route('/', methods=['GET', 'POST'])
 
@@ -18,7 +17,6 @@ def index():
     if request.method == "POST":
         details = request.form
         query = details['statement']
-        table = details['table']
         cur = mysql.connection.cursor()
         row = cur.execute(query)
         rows = cur.fetchall()
