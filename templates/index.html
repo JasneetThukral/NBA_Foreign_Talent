@@ -1,15 +1,22 @@
 <HTML>
   <BODY bgcolor="cyan">
-  <form method="POST" action="">
+  <form method="POST" value="">
       <center>
-        <H1>Enter your table </H1> <br>
-         <input type = "text" name= "table" /> <br>
-       Query: <input type = "submit">
+        <!-- <H1>Enter your table </H1> <br>
+         <input type = "text" name= "table" /> <br> -->
+				 <label for="table">Choose a table:</label>
+				 <select id="table" name="table">
+  			 	<option value="Players">Players</option>
+  				<option value="Statistics">Statistics</option>
+  				<option value="Teams">Teams</option>
+  				<option value="Leagues">Leagues</option>
+					</select>
+       		<input type = "submit" value="submit">
       <H1>Enter your query </H1> <br>
        <input type = "text" name= "statement" /> <br>
       <input type = "submit">
           <p1>{{ output }}!</p1>
       </center>
-</form>
-</BODY>
+	</form>
+	</BODY>
 </HTML>
