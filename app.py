@@ -13,11 +13,11 @@ mysql = MySQL(app)
 table1 = ""
 
 @app.route('/', methods=['GET', 'POST'])
-
 def index():
     if request.method == "POST":
         details = request.form
         query = details['statement']
+        print(details)
         global table1
         table1 = details['table']
         cur = mysql.connection.cursor()
@@ -27,18 +27,23 @@ def index():
             print(row)
         mysql.connection.commit()
         cur.close()
-        print(query)
     return render_template('index.html')
 
+@app.route('/scout_home',methods=['GET', 'POST'])
+def scout_login():
+    return "<h1> Scout Login </h1>"
+
+@app.route('/commissioner_home',methods=['GET', 'POST'])
+def commissioner_login():
+    return "<h1> Commissioner Login </h1>"
 
 @app.route('/results',methods=['GET', 'POST'])
 def script_output():
     cur = mysql.connection.cursor()
-    # if str(table) == "Players":
     cur.execute("SELECT * FROM " + str(table1))
     rows = cur.fetchall()
     print(rows)
-    return render_template('results.html',output=rows)
+    return render_template('results.html',output=rows,table=table1)
 
 @app.route('/advanced',methods=['GET', 'POST'])
 def advance():
