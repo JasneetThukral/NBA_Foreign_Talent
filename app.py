@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
+import pandas as pd
+import itertools
 
 
 app = Flask(__name__,template_folder='templates')
@@ -11,6 +13,8 @@ app.config['MYSQL_CURSURCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 table1 = ""
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -58,3 +62,20 @@ def advance():
     return render_template('advanced.html',output_one=rows,output_two=row_two)
 if __name__ == 'main':
     app.run(debug=True)
+
+@app.route('/cor')
+def correlation_matrix():
+    cur = mysql.connection.cursor()
+    qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points), COUNT(*) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
+    output = cur.execute(qu)
+    records = cur.fetchall()
+    teamStats = {}
+    for row in records:
+        teamStats["FieldGoalAttempts"]= [row[0]]
+        teamStats["FieldGoalPercent"] = [row[1]]
+    for k,v in teamStats.items():
+        print (k,v)
+    
+    return
+
+
