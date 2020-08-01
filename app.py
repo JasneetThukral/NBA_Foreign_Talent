@@ -3,6 +3,9 @@ from flask_mysqldb import MySQL
 import pandas as pd
 import itertools
 import numpy as np
+from patsy import dmatrices
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
 
 app = Flask(__name__,template_folder='templates')
 app.config['MYSQL_USER'] = 'sql3356970'
@@ -68,7 +71,7 @@ if __name__ == 'main':
     app.run(debug=True)
 
 @app.route('/cor')
-def correlation_matrix():
+def checkingToDropVariables():
     cur = mysql.connection.cursor()
     qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
     output = cur.execute(qu)
@@ -103,12 +106,15 @@ def correlation_matrix():
     correlationMatrix = dataF.corr()
     rows,cols = correlationMatrix.shape
     global verifyAttributes
+
+    #Figure out which variables are under the suspicion of mulitcollinearity using correlation matrix
     for i in range(cols):
         for j in range(i, cols):
             if ((correlationMatrix[fields[i]][j] > 0.7 and correlationMatrix[fields[i]][j] < 1.0)
                 or (correlationMatrix[fields[i]][j] < -0.7 and correlationMatrix[fields[i]][j] > -1.0)):
                 verifyAttributes.append([fields[i], fields[j]])
-    
+
+    # Getting rid of duplicates from verifyAttributes
     temp = []
     for elem in verifyAttributes:
         if elem not in temp:
@@ -116,11 +122,30 @@ def correlation_matrix():
     verifyAttributes = temp
     cur.close()
     print(verifyAttributes)
+
+    vifDrops = []
+    # Calculate which attributes have a high vif value
+    if (len(verifyAttributes) >= 1):
+        while True:
+            X = add_constant(dataF)
+            vif = pd.Series([variance_inflation_factor(X.values, i) 
+               for i in range(X.shape[1])], 
+                index=X.columns)
+            print(vif)
+            vif.drop('const', axis = 0, inplace=True)
+            if (vif.max() > 5):
+                theMax = vif.idxmax()
+                vifDrops.append(theMax)
+                dataF.drop(theMax, axis=1,inplace=True)
+
+            else:
+                break
+    print(vifDrops)
     #Running the r-Values Function here as it does not have a path
-    r_values()
+    #r_values()
     return
 
-
+"""
 def r_values():
     data = pd.read_csv('NBARankings.csv')
     rankings = data['rankings'].values
@@ -129,7 +154,7 @@ def r_values():
                 "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
                 "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
     for elem in verifyAttributes:
-        # CSV File matches with the results of this query based on alphabetical ordeer *HARDCODED*
+        # CSV File matches with the results of this query based on alphabetical order *HARDCODED*
         cur = mysql.connection.cursor()
         output_one = cur.execute("SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %elem[0])
         results_one = cur.fetchall()
@@ -148,3 +173,4 @@ def r_values():
         secondRValue = secondCorrMatrix[0,1]
         #print(elem[1], secondRValue)
     return
+"""
