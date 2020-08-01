@@ -73,7 +73,9 @@ def correlation_matrix():
     teamStats = {"FieldGoalAttempts": [], "FieldGoalPercent": [], "ThreePointAttempts": [], "ThreePointPercent": [], "TwoPointAttempts": [],
                 "TwoPointPercent": [],"EFieldGoal": [],"FreeThrowAttempts": [],"FreeThrowPercent": [], "Rebounds": [],"Assists": [],
                 "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
+                
     for row in records:
+        
         teamStats["FieldGoalAttempts"].append(row[0])
         teamStats["FieldGoalPercent"].append(row[1])
         teamStats["ThreePointAttempts"].append(row[2])
@@ -109,3 +111,5 @@ def correlation_matrix():
     return
 
 
+def r_values():
+    
