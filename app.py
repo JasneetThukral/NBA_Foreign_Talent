@@ -49,6 +49,7 @@ def script_output():
     cur.execute("SELECT * FROM " + str(table1))
     rows = cur.fetchall()
     print(rows)
+    cur.close()
     return render_template('results.html',output=rows,table=table1)
 
 @app.route('/advanced',methods=['GET', 'POST'])
@@ -61,6 +62,8 @@ def advance():
     rows = cur.fetchall()
     row_two = cur_two.fetchall()
     print(rows)
+    cur.close()
+    cur_two.close()
     return render_template('advanced.html',output_one=rows,output_two=row_two)
 if __name__ == 'main':
     app.run(debug=True)
@@ -104,7 +107,6 @@ def correlation_matrix():
     print(rows, cols)
     print(correlationMatrix[fields[0]][0])
     global verifyAttributes
-
     for i in range(cols):
         for j in range(i, cols):
             if ((correlationMatrix[fields[i]][j] > 0.8 and correlationMatrix[fields[i]][j] < 1.0)
@@ -116,15 +118,17 @@ def correlation_matrix():
         if elem not in temp:
             temp.append(elem)
     verifyAttributes = temp
-
     print(verifyAttributes)
+    cur.close()
+    r_values()
     return
 
 
 def r_values():
-    rankings = pd.read_csv(NBARankings.csv)
-    
+    data = pd.read_csv('NBARankings.csv')
+    rankings = data['rankings'].values
     matrix = []
+    print(verifyAttributes)
     for elem in verifyAttributes:
         for x in elem:
             # CSV File matches with the results of this query based on alphabetical ordeer *HARDCODED*
@@ -133,12 +137,13 @@ def r_values():
             output_one = cur.execute(qu)
             results_one = cur.fetchall()
 
+            xValues = [x for [x] in results_one]
+            print(xValues)
+
 
             cur2 = mysql.connection.cursor()
             qu = "SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %(x + 1)
             output_two = cur2.execute(qu)
             results_two = cur2.fetchall()
 
-                      
-
-    return rankings
+    return
