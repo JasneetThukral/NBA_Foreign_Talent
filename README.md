@@ -1,4 +1,4 @@
-# Fantasy-Basketball
+# Fantasy Basketball
 
 Developer Instructions:
 
