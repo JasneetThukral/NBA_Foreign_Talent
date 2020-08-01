@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import pandas as pd
 import itertools
-from sklearn.linear_model import LinearRegression
 import numpy as np
 
 app = Flask(__name__,template_folder='templates')
@@ -103,13 +102,11 @@ def correlation_matrix():
     fields = list(dataF.columns)
     correlationMatrix = dataF.corr()
     rows,cols = correlationMatrix.shape
-    print(rows, cols)
-    print(correlationMatrix[fields[0]][0])
     global verifyAttributes
     for i in range(cols):
         for j in range(i, cols):
-            if ((correlationMatrix[fields[i]][j] > 0.8 and correlationMatrix[fields[i]][j] < 1.0)
-                or (correlationMatrix[fields[i]][j] < -0.8 and correlationMatrix[fields[i]][j] > -1.0)):
+            if ((correlationMatrix[fields[i]][j] > 0.7 and correlationMatrix[fields[i]][j] < 1.0)
+                or (correlationMatrix[fields[i]][j] < -0.7 and correlationMatrix[fields[i]][j] > -1.0)):
                 verifyAttributes.append([fields[i], fields[j]])
     
     temp = []
@@ -118,6 +115,8 @@ def correlation_matrix():
             temp.append(elem)
     verifyAttributes = temp
     cur.close()
+    print(verifyAttributes)
+    #Running the r-Values Function here as it does not have a path
     r_values()
     return
 
@@ -126,6 +125,9 @@ def r_values():
     data = pd.read_csv('NBARankings.csv')
     rankings = data['rankings'].values
     matrix = []
+    allAtributes = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
+                "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
+                "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
     for elem in verifyAttributes:
         # CSV File matches with the results of this query based on alphabetical ordeer *HARDCODED*
         cur = mysql.connection.cursor()
@@ -135,7 +137,7 @@ def r_values():
         firstXValues = [x for [x] in results_one]
         firstCorrMatrix = np.corrcoef(firstXValues, rankings)
         firstRValue = firstCorrMatrix[0,1]
-        print(firstRValue)
+        #print(elem[0], firstRValue)
 
         cur2 = mysql.connection.cursor()
         output_two = cur2.execute("SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %elem[1])
@@ -144,6 +146,5 @@ def r_values():
         secondXValues = [x for [x] in results_two]
         secondCorrMatrix = np.corrcoef(secondXValues, rankings)
         secondRValue = secondCorrMatrix[0,1]
-        print(secondRValue)
-
+        #print(elem[1], secondRValue)
     return
