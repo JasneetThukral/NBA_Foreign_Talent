@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import pandas as pd
 import itertools
+import math
 
 
 app = Flask(__name__,template_folder='templates')
@@ -66,16 +67,45 @@ if __name__ == 'main':
 @app.route('/cor')
 def correlation_matrix():
     cur = mysql.connection.cursor()
-    qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points), COUNT(*) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
+    qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
     output = cur.execute(qu)
     records = cur.fetchall()
-    teamStats = {}
+    teamStats = {"FieldGoalAttempts": [], "FieldGoalPercent": [], "ThreePointAttempts": [], "ThreePointPercent": [], "TwoPointAttempts": [],
+                "TwoPointPercent": [],"EFieldGoal": [],"FreeThrowAttempts": [],"FreeThrowPercent": [], "Rebounds": [],"Assists": [],
+                "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
     for row in records:
-        teamStats["FieldGoalAttempts"]= [row[0]]
-        teamStats["FieldGoalPercent"] = [row[1]]
-    for k,v in teamStats.items():
-        print (k,v)
+        teamStats["FieldGoalAttempts"].append(row[0])
+        teamStats["FieldGoalPercent"].append(row[1])
+        teamStats["ThreePointAttempts"].append(row[2])
+        teamStats["ThreePointPercent"].append(row[3])
+        teamStats["TwoPointAttempts"].append(row[4])
+        teamStats["TwoPointPercent"].append(row[5])
+        teamStats["EFieldGoal"].append(row[6])
+        teamStats["FreeThrowAttempts"].append(row[7])
+        teamStats["FreeThrowPercent"].append(row[8])
+        teamStats["Rebounds"].append(row[9])
+        teamStats["Assists"].append(row[10])
+        teamStats["Steals"].append(row[11])
+        teamStats["Blocks"].append(row[12])
+        teamStats["Turnovers"].append(row[13])
+        teamStats["PersonalFouls"].append(row[14])
+        teamStats["Points"].append(row[15])
+
+    dataF = pd.DataFrame(teamStats, columns = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
+                "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
+                "Steals","Blocks", "Turnovers","PersonalFouls", "Points"])
     
+    fields = list(dataF.columns)
+    correlationMatrix = dataF.corr()
+    rows,cols = correlationMatrix.shape
+    print(rows, cols)
+    print(correlationMatrix[fields[0]][0])
+    
+    for i in range(cols):
+        for j in range(i, cols):
+            if ((correlationMatrix[fields[i]][j] > 0.8 and correlationMatrix[fields[i]][j] < 1.0)
+                or (correlationMatrix[fields[i]][j] < -0.8 and correlationMatrix[fields[i]][j] > -1.0)):
+                print (fields[i], fields[j], correlationMatrix[fields[i]][j])
     return
 
 
