@@ -79,7 +79,6 @@ def correlation_matrix():
                 "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
                 
     for row in records:
-        
         teamStats["FieldGoalAttempts"].append(row[0])
         teamStats["FieldGoalPercent"].append(row[1])
         teamStats["ThreePointAttempts"].append(row[2])
@@ -118,7 +117,6 @@ def correlation_matrix():
         if elem not in temp:
             temp.append(elem)
     verifyAttributes = temp
-    print(verifyAttributes)
     cur.close()
     r_values()
     return
@@ -128,22 +126,24 @@ def r_values():
     data = pd.read_csv('NBARankings.csv')
     rankings = data['rankings'].values
     matrix = []
-    print(verifyAttributes)
     for elem in verifyAttributes:
-        for x in elem:
-            # CSV File matches with the results of this query based on alphabetical ordeer *HARDCODED*
-            cur = mysql.connection.cursor()
-            qu = "SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %(x)
-            output_one = cur.execute(qu)
-            results_one = cur.fetchall()
+        # CSV File matches with the results of this query based on alphabetical ordeer *HARDCODED*
+        cur = mysql.connection.cursor()
+        output_one = cur.execute("SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %elem[0])
+        results_one = cur.fetchall()
 
-            xValues = [x for [x] in results_one]
-            print(xValues)
+        firstXValues = [x for [x] in results_one]
+        firstCorrMatrix = np.corrcoef(firstXValues, rankings)
+        firstRValue = firstCorrMatrix[0,1]
+        print(firstRValue)
 
+        cur2 = mysql.connection.cursor()
+        output_two = cur2.execute("SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %elem[1])
+        results_two = cur2.fetchall()
 
-            cur2 = mysql.connection.cursor()
-            qu = "SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %(x + 1)
-            output_two = cur2.execute(qu)
-            results_two = cur2.fetchall()
+        secondXValues = [x for [x] in results_two]
+        secondCorrMatrix = np.corrcoef(secondXValues, rankings)
+        secondRValue = secondCorrMatrix[0,1]
+        print(secondRValue)
 
     return
