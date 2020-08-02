@@ -1,0 +1,47 @@
+@import url(font-awesome.min.css);
+@import url("https://fonts.googleapis.com/css?family=Pacifico|Source+Sans+Pro:200,400");
+
+/*
+Epilogue by TEMPLATED
+templated.co @templatedco
+Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+*/
+
+/*Own Styling*/
+body {
+    background-color: bisque;
+}
+.select {
+    padding-left: 450px;
+    text-align:center;
+}
+.search #search-bar{
+    width: 1900px;
+    height:50px;
+}
+.table ,.table-striped, .table-dark {
+    height: 500px;
+    width: 400px;
+}
+.table_one {
+    border: 5px;
+    margin-top: 30px;
+    margin-right: 20px;
+    margin-left: 40px;
+}
+.table_two {
+    margin-top: 30px;
+    margin-left:300px;
+}
+.table_three {
+    margin-top: 30px;
+    margin-right: 20px;
+    margin-left: 300px;
+}
+
+.column {
+    float: left;
+    border: 2px;
+    height: 300px;
+  }
+
