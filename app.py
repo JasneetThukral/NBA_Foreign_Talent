@@ -45,5 +45,17 @@ def script_output():
     row_four = cur_four.fetchall()
     print(rows)
     return render_template('results.html',output_one=rows,output_two=row_two,output_three=row_three,output_four=row_four)
+
+@app.route('/advanced',methods=['GET', 'POST'])
+def advance():
+    cur = mysql.connection.cursor()
+    cur_two = mysql.connection.cursor()
+    # if str(table) == "Players":
+    output_one = cur.execute("Select count(p.PlayerID), t.wins From Players p, Teams t Where p.TeamName = t.TeamName AND p.height > 78 Group by t.TeamName")
+    output_two = cur_two.execute("Select count(p.PlayerID), t.wins From Players p, Teams t Where p.TeamName = t.TeamName AND p.weight > 200 Group by t.TeamName")
+    rows = cur.fetchall()
+    row_two = cur_two.fetchall()
+    print(rows)
+    return render_template('advanced.html',output_one=rows,output_two=row_two)
 if __name__ == 'main':
     app.run(debug=True)
