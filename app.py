@@ -6,7 +6,7 @@ import numpy as np
 from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
-import sklearn
+from sklearn.linear_model import LinearRegression
 
 
 app = Flask(__name__,template_folder='templates')
@@ -181,13 +181,47 @@ def machineLearning():
     allAtributes = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
                 "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
                 "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
-    allCombinations = []            
+    allCombinations = []
+    cur = mysql.connection.cursor()
+    qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
+    output = cur.execute(qu)
+    records = cur.fetchall()
+    teamStats = {"FieldGoalAttempts": [], "FieldGoalPercent": [], "ThreePointAttempts": [], "ThreePointPercent": [], "TwoPointAttempts": [],
+                "TwoPointPercent": [],"EFieldGoal": [],"FreeThrowAttempts": [],"FreeThrowPercent": [], "Rebounds": [],"Assists": [],
+                "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
+                
+    for row in records:
+        teamStats["FieldGoalAttempts"].append(row[0])
+        teamStats["FieldGoalPercent"].append(row[1])
+        teamStats["ThreePointAttempts"].append(row[2])
+        teamStats["ThreePointPercent"].append(row[3])
+        teamStats["TwoPointAttempts"].append(row[4])
+        teamStats["TwoPointPercent"].append(row[5])
+        teamStats["EFieldGoal"].append(row[6])
+        teamStats["FreeThrowAttempts"].append(row[7])
+        teamStats["FreeThrowPercent"].append(row[8])
+        teamStats["Rebounds"].append(row[9])
+        teamStats["Assists"].append(row[10])
+        teamStats["Steals"].append(row[11])
+        teamStats["Blocks"].append(row[12])
+        teamStats["Turnovers"].append(row[13])
+        teamStats["PersonalFouls"].append(row[14])
+        teamStats["Points"].append(row[15])
+    data = pd.read_csv('NBARankings.csv')
+    y = data['rankings'].values
+    y = np.array(y)
+
     for x in range(1, len(allAtributes) + 1):
         allCombinations.append(list(itertools.combinations(allAtributes, x)))
-    for elem in allCombinations:
-        for x in elem:
-            kf = sklearn.model_selection.KFold(n_splits= 3)
-            kf.get_n_splits(x)
+    for elem in allCombinations:#((3PA, PF,P),(3PA, PF, 2PA))
+        for combination in elem: #(3Pa, PF, P)
+            dataset = []
+            for attribute in combination: #3PA
+                dataset.append(teamStats[attribute])
+            dataset = np.array(dataset)
+            LinearRegression().fit(np.transpose(dataset), np.transpose(y))
+            print("running")
+    
         
 """
     Find all different combinations of the attributes' values
