@@ -177,66 +177,245 @@ def r_values():
 
 @app.route('/kCross')
 def machineLearning():
-    #Find all the combinations of different lengths of all attributes to create various models to insert into k-cross
-    allAtributes = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
-                "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
-                "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
-    allCombinations = []
-    cur = mysql.connection.cursor()
-    qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
-    output = cur.execute(qu)
-    records = cur.fetchall()
-    teamStats = {"FieldGoalAttempts": [], "FieldGoalPercent": [], "ThreePointAttempts": [], "ThreePointPercent": [], "TwoPointAttempts": [],
-                "TwoPointPercent": [],"EFieldGoal": [],"FreeThrowAttempts": [],"FreeThrowPercent": [], "Rebounds": [],"Assists": [],
-                "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
-                
-    for row in records:
-        teamStats["FieldGoalAttempts"].append(row[0])
-        teamStats["FieldGoalPercent"].append(row[1])
-        teamStats["ThreePointAttempts"].append(row[2])
-        teamStats["ThreePointPercent"].append(row[3])
-        teamStats["TwoPointAttempts"].append(row[4])
-        teamStats["TwoPointPercent"].append(row[5])
-        teamStats["EFieldGoal"].append(row[6])
-        teamStats["FreeThrowAttempts"].append(row[7])
-        teamStats["FreeThrowPercent"].append(row[8])
-        teamStats["Rebounds"].append(row[9])
-        teamStats["Assists"].append(row[10])
-        teamStats["Steals"].append(row[11])
-        teamStats["Blocks"].append(row[12])
-        teamStats["Turnovers"].append(row[13])
-        teamStats["PersonalFouls"].append(row[14])
-        teamStats["Points"].append(row[15])
-    data = pd.read_csv('NBARankings.csv')
-    y = data['rankings'].values
-    y = np.array(y)
+   #Find all the combinations of different lengths of all attributes to create various models to insert into k-cross
+   allAtributes = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
+               "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
+               "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
+   allCombinations = []
+   cur = mysql.connection.cursor()
+   qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
+   output = cur.execute(qu)
+   records = cur.fetchall()
+   teamStats = {"FieldGoalAttempts": [], "FieldGoalPercent": [], "ThreePointAttempts": [], "ThreePointPercent": [], "TwoPointAttempts": [],
+               "TwoPointPercent": [],"EFieldGoal": [],"FreeThrowAttempts": [],"FreeThrowPercent": [], "Rebounds": [],"Assists": [],
+               "Steals": [],"Blocks": [], "Turnovers": [],"PersonalFouls": [], "Points": [] }
+              
+   for row in records:
+       teamStats["FieldGoalAttempts"].append(row[0])
+       teamStats["FieldGoalPercent"].append(row[1])
+       teamStats["ThreePointAttempts"].append(row[2])
+       teamStats["ThreePointPercent"].append(row[3])
+       teamStats["TwoPointAttempts"].append(row[4])
+       teamStats["TwoPointPercent"].append(row[5])
+       teamStats["EFieldGoal"].append(row[6])
+       teamStats["FreeThrowAttempts"].append(row[7])
+       teamStats["FreeThrowPercent"].append(row[8])
+       teamStats["Rebounds"].append(row[9])
+       teamStats["Assists"].append(row[10])
+       teamStats["Steals"].append(row[11])
+       teamStats["Blocks"].append(row[12])
+       teamStats["Turnovers"].append(row[13])
+       teamStats["PersonalFouls"].append(row[14])
+       teamStats["Points"].append(row[15])
+   data = pd.read_csv('NBARankings.csv')
+   y = data['rankings'].values
+   y = np.array(y)
+ 
+   for x in range(1, len(allAtributes) + 1):
+       allCombinations.append(list(itertools.combinations(allAtributes, x)))
+ 
+   #create array that will store model and associated score
+   # [([model 1], score1), ([model 2], score2), ([model 3], score3)]
+   model_scores = []
+  
+   for elem in allCombinations:   
+ 
+       for combination in elem:
+ 
+           #dataset stores the "datasets" of every attribute within a particualar combination, it will be the "x" for linReg
+           x_vals_first_split_train = []  #10-30
+           x_vals_second_split_train = [] #0-10 + 20-30
+           x_vals_third_split_train = []  #0-20
+ 
+           #extract data for all the combinations
+           for attribute in combination:  
+               x_vals_first_split_train.append((teamStats[attribute])[10:30])
+              
+               temp_0_10 = teamStats[attribute][0:10]
+               temp_20_30 = teamStats[attribute][20:30]
+               temp_combined = []
+               for i in range(10):
+                   temp_combined.append(temp_0_10[i])
+               for j in range(10):
+                   temp_combined.append(temp_20_30[i])
+               x_vals_second_split_train.append(temp_combined)
+ 
+               x_vals_third_split_train.append((teamStats[attribute])[0:20])
+          
+           #make all y combinations
+           y_1 = y[10:30] 
+ 
+           temp_1 = y[0:10]
+           temp_2 = y[20:30]
+          
+ 
+           y_2 = np.concatenate(temp_1 , temp_2)
+ 
+           y_3 = y[0:20]
+ 
+           #make dataset compatable with numpy
+           x_vals_first_split_train = np.array(x_vals_first_split_train)
+           x_vals_second_split_train = np.array(x_vals_second_split_train)
+           x_vals_third_split_train = np.array(x_vals_third_split_train)
+ 
+           #make linear regression with train data
+           lr_first_split_train = LinearRegression().fit(np.transpose(x_vals_first_split_train), np.transpose(y_1))
+           lr_second_split_train = LinearRegression().fit(np.transpose(dataset), np.transpose(y_2))
+           lr_third_split_train = LinearRegression().fit(np.transpose(x_vals_third_split_train), np.transpose(y_3))
+ 
+           #sse first split
+           #for every test point...
+           sse_1 = 0
+           for data_point_num in range(10): #0-10
+               #find the individual points we want to predict
+               single_point = []
+               for attrArr in x_vals_first_split_train:
+                   single_point_attribute = []
+                   single_point_attribute.append(attrArr[data_point_num])
+                   single_point.append(single_point_attribute)
+               #once we have a point we want to predict, predict point
+               single_point = np.transpose(single_point)
+               predicted_val = lr_first_split_train.predict(np.array(single_point))
+               #find Squared Error of point and to sse
+               actual_val = y_1[data_point_num]
+               sse_1 += pow((actual_val - predicted_val), 2)
+          
+           #TODO: sse second split
+           sse_2 = 0
+           for data_point_num in range(10,21): #20-30
+               #find the individual points we want to predict
+               single_point = []
+               for attrArr in x_vals_first_split_train:
+                   single_point_attribute = []
+                   single_point_attribute.append(attrArr[data_point_num])
+                   single_point.append(single_point_attribute)
+               #once we have a point we want to predict, predict point
+               single_point = np.transpose(single_point)
+               predicted_val = lr_second_split_train.predict(np.array(single_point))
+               #find Squared Error of point and to sse
+               actual_val = y_2[data_point_num]
+               sse_2 += pow((actual_val - predicted_val), 2)
+ 
+           #sse third split
+           #for every test point...
+           sse_3 = 0
+           for data_point_num in range(20,31): #20-30
+               #find the individual points we want to predict
+               single_point = []
+               for attrArr in x_vals_first_split_train:
+                   single_point_attribute = []
+                   single_point_attribute.append(attrArr[data_point_num])
+                   single_point.append(single_point_attribute)
+               #once we have a point we want to predict, predict point
+               single_point = np.transpose(single_point)
+               predicted_val = lr_third_split_train.predict(np.array(single_point))
+               #find Squared Error of point and to sse
+               actual_val = y_3[data_point_num]
+               sse_3 += pow((actual_val - predicted_val), 2)
+ 
+           avg_sse = (sse_1 + sse_2 + sse_3)/3
+ 
+           # [([model 1], score1), ([model 2], score2), ([model 3], score3)]
+           model_scores.append([combination, avg_sse])
+  
+   #print at the end
+   print(model_scores)
+ 
+   return
+ 
+          
+ 
+ 
+   # model_scores = []
+  
+   # for elem in allCombinations:   
+ 
+   #     for combination in elem:
+ 
+   #         #dataset stores the "datasets" of every attribute within a particualar combination, it will be the "x" for linReg
+   #         x_vals_first_split_train = []  #10-30
+ 
+   #         #extract data for all the combinations
+   #         for attribute in combination:  
+   #             x_vals_first_split_train.append(teamStats[attribute][10:30])
+          
+   #         #populate y with correct values
+   #         y_1 = y[10:30]
+ 
+   #         #make dataset compatable with numpy
+   #         x_vals_first_split_train = np.array(x_vals_first_split_train)
+ 
+   #         #make linear regression with train data
+   #         lr_first_split_train = LinearRegression().fit(np.transpose(x_vals_first_split_train), np.transpose(y_1))
+ 
+   #         #sse first split
+   #         #for every test point...
+   #         sse_1 = 0
+   #         for data_point_num in range(10): #0-10
+   #             #find the individual points we want to predict
+   #             single_point = []
+   #             for attrArr in x_vals_first_split_train:
+   #                 single_point_attribute = []
+   #                 single_point_attribute.append(attrArr[data_point_num])
+   #                 single_point.append(single_point_attribute)
+   #             #once we have a point we want to predict, predict point
+   #             single_point = np.transpose(single_point)
+   #             predicted_val = lr_first_split_train.predict(np.array(single_point))
+   #             # reg.predict(np.array([[3, 5]]))
+   #             #find Squared Error of point and to sse
+   #             actual_val = y_1[data_point_num]
+   #             sse_1 += pow((actual_val - predicted_val), 2)
+  
+   #         avg_sse = sse_1
+ 
+ 
+   #         # [([model 1], score1), ([model 2], score2), ([model 3], score3)]
+   #         model_scores.append([combination, avg_sse])
+ 
+   # print(model_scores)
+ 
+ 
+          
+ 
+         
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+              
+ 
+                  
+                  
+                 
+ 
+ 
+ 
+ 
+ 
+ 
+      
+ 
+ 
+ 
+ 
+"""
+   Find all different combinations of the attributes' values
+   For every combination:
+       All splits = [Use K cross to split the data]
+       For every split:
+           Create linear regression line using the train data with rankings as dependent variable
+           Use linear regression line to predict test data
+           Compute the square of error
+       Compute the sum of squared errors
+       Find the
+  
+  
+"""
 
-    for x in range(1, len(allAtributes) + 1):
-        allCombinations.append(list(itertools.combinations(allAtributes, x)))
-    for elem in allCombinations:#((3PA, PF,P),(3PA, PF, 2PA))
-        for combination in elem: #(3Pa, PF, P)
-            dataset = []
-            for attribute in combination: #3PA
-                dataset.append(teamStats[attribute])
-            dataset = np.array(dataset)
-            #LinearRegression().fit(np.transpose(dataset), np.transpose(y))
-            for attr in dataset:
-                print(dataset[attr])
-    
-        
-"""
-    Find all different combinations of the attributes' values
-    For every combination:
-        All splits = [Use K cross to split the data]
-        For every split:
-            Create linear regression line using the train data with rankings as dependent variable 
-            Use linear regression line to predict test data
-            Compute the square of error
-        Compute the sum of squared errors
-        Find the 
-    
-    
-"""
     
 
 
