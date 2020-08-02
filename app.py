@@ -219,8 +219,9 @@ def machineLearning():
             for attribute in combination: #3PA
                 dataset.append(teamStats[attribute])
             dataset = np.array(dataset)
-            LinearRegression().fit(np.transpose(dataset), np.transpose(y))
-            print("running")
+            #LinearRegression().fit(np.transpose(dataset), np.transpose(y))
+            for attr in dataset:
+                print(dataset[attr])
     
         
 """
