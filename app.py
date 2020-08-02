@@ -6,6 +6,8 @@ import numpy as np
 from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
+import sklearn
+
 
 app = Flask(__name__,template_folder='templates')
 app.config['MYSQL_USER'] = 'sql3356970'
@@ -70,7 +72,7 @@ def advance():
 if __name__ == 'main':
     app.run(debug=True)
 
-@app.route('/cor')
+@app.route('/drop')
 def checkingToDropVariables():
     cur = mysql.connection.cursor()
     qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
@@ -121,26 +123,24 @@ def checkingToDropVariables():
             temp.append(elem)
     verifyAttributes = temp
     cur.close()
-    print(verifyAttributes)
 
-    vifDrops = []
     # Calculate which attributes have a high vif value
-    if (len(verifyAttributes) >= 1):
+    vifDrops = []
+    if (len(verifyAttributes) > 0):
         while True:
             X = add_constant(dataF)
             vif = pd.Series([variance_inflation_factor(X.values, i) 
                for i in range(X.shape[1])], 
                 index=X.columns)
-            print(vif)
             vif.drop('const', axis = 0, inplace=True)
             if (vif.max() > 5):
                 theMax = vif.idxmax()
-                vifDrops.append(theMax)
-                dataF.drop(theMax, axis=1,inplace=True)
-
+                vifDrops.append([theMax, vif.max()])
+                dataF.drop(theMax, axis=1, inplace=True)
             else:
                 break
-    print(vifDrops)
+
+    print("VIF will drop these variables: ", vifDrops)
     #Running the r-Values Function here as it does not have a path
     #r_values()
     return
@@ -162,7 +162,7 @@ def r_values():
         firstXValues = [x for [x] in results_one]
         firstCorrMatrix = np.corrcoef(firstXValues, rankings)
         firstRValue = firstCorrMatrix[0,1]
-        #print(elem[0], firstRValue)
+        print(elem[0], firstRValue)
 
         cur2 = mysql.connection.cursor()
         output_two = cur2.execute("SELECT AVG(S.%s) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName ORDER BY T.TeamName" %elem[1])
@@ -171,6 +171,39 @@ def r_values():
         secondXValues = [x for [x] in results_two]
         secondCorrMatrix = np.corrcoef(secondXValues, rankings)
         secondRValue = secondCorrMatrix[0,1]
-        #print(elem[1], secondRValue)
+        print(elem[1], secondRValue)
     return
 """
+
+@app.route('/kCross')
+def machineLearning():
+    #Find all the combinations of different lengths of all attributes to create various models to insert into k-cross
+    allAtributes = ["FieldGoalAttempts", "FieldGoalPercent", "ThreePointAttempts", "ThreePointPercent", "TwoPointAttempts",
+                "TwoPointPercent","EFieldGoal","FreeThrowAttempts","FreeThrowPercent", "Rebounds","Assists",
+                "Steals","Blocks", "Turnovers","PersonalFouls", "Points"]
+    allCombinations = []            
+    for x in range(1, len(allAtributes) + 1):
+        allCombinations.append(list(itertools.combinations(allAtributes, x)))
+    for elem in allCombinations:
+        for x in elem:
+            kf = sklearn.model_selection.KFold(n_splits= 3)
+            kf.get_n_splits(x)
+        
+"""
+    Find all different combinations of the attributes' values
+    For every combination:
+        All splits = [Use K cross to split the data]
+        For every split:
+            Create linear regression line using the train data with rankings as dependent variable 
+            Use linear regression line to predict test data
+            Compute the square of error
+        Compute the sum of squared errors
+        Find the 
+    
+    
+"""
+    
+
+
+
+    
