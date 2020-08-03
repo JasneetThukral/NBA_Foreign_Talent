@@ -8,6 +8,7 @@ Released for free under the Creative Commons Attribution 3.0 license (templated.
 */
 
 /*Own Styling*/
+
 body {
     background-color: bisque;
 }
@@ -20,23 +21,24 @@ body {
     height:50px;
 }
 .table ,.table-striped, .table-dark {
-    height: 500px;
-    width: 400px;
+    height: 1400px;
+    width: 500px;
 }
 .table_one {
     border: 5px;
     margin-top: 30px;
     margin-right: 20px;
     margin-left: 40px;
+    height:100px;
 }
 .table_two {
     margin-top: 30px;
-    margin-left:300px;
+    margin-left:100px;
 }
 .table_three {
     margin-top: 30px;
     margin-right: 20px;
-    margin-left: 300px;
+    margin-left: 100px;
 }
 
 .column {
@@ -44,4 +46,9 @@ body {
     border: 2px;
     height: 300px;
   }
+  .custom {
+    margin-top: 30px;
+    margin-left: 280px;
+    width: 900px;
+}
 
