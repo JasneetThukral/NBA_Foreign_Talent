@@ -2,15 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from fantasybasketball import app, mysql
-from flask_login import UserMixin, LoginManager
 import os
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
-
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
@@ -42,9 +34,10 @@ class SignUpForm(FlaskForm):
             if str(row[0]) == email.data:
                 raise ValidationError('Email already has account')
 
-
 class SignInForm(FlaskForm):
     username = StringField('Username',
                         validators=[DataRequired(), Length(min=5, max=10)])
     password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
     submit = SubmitField('Sign In')

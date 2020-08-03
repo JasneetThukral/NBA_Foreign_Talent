@@ -1,75 +1,86 @@
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 from fantasybasketball import app, mysql
-from flask_login import login_user, current_user, logout_user, login_required
 from fantasybasketball.authentication import SignUpForm, SignInForm
-from flask_login import LoginManager
+import MySQLdb.cursors
+
+loggedin = False
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
     return redirect('/about')
 
 @app.route('/about', methods=['GET', 'POST'])
-def display():
+def displayabout():
     return render_template('about.html')
 
 @app.route('/home', methods=['GET', 'POST'])
-def display2():
-    return "<h1> Home Page </h1>"
+def displayhome():
+    # Change later to display specific scout's team's information
+    global loggedin
+    if loggedin:
+        render_template('home.html', login=True)
+    else:
+        render_template('home.html', login=False)
 
 @app.route('/favorites', methods=['GET', 'POST'])
-def display3():
+def displayfavorites():
     return ""
 
 @app.route('/signin',methods=['GET', 'POST'])
 def signin():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    else:
-        user_form = SignInForm()
+    global loggedin
+    if loggedin:
+        return "You are already signed in as " + session['username'] + "."
+    user_form = SignInForm()
+    if request.method == 'POST':
         if user_form.validate_on_submit():
             # check if the data submitted by the user is correct
-            cur = mysql.connection.cursor()
-            cur.execute('''SELECT Username, Password FROM Scouts''')
-            rows = cur.fetchall()
-            for row in rows:
-                if row[0] == user_form.username.data and row[1] == user_form.password.data:
-                    login_user(user)
-                    next_page = request.args.get('next')
-                    if next_page:
-                        redirect(next_page)
-                    else:
-                        redirect('/home')
-            flash('wrong sign in.', 'fail')
+            cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur.execute('''SELECT * FROM Scouts WHERE Username = %s AND Password = %s AND Email = %s''', (user_form.username.data, user_form.password.data, user_form.email.data,))
+            user = cur.fetchone()
+            if user:
+                loggedin = True
+                session['loggedin'] = True
+                session['username'] = user['Username']
+                session['password'] = user['Password']
+                session['email'] = user['Email']
+                # Login User and display their information
+                return redirect('/home')
+            else:
+                return "<h1> You have entered an incorrect email, username, and password combination. Please restart sign in. </h1>"
         return render_template('signin.html', form=user_form)
+    return render_template('signin.html', form=user_form)
 
 @app.route('/signout',methods=['GET', 'POST'])
 def signout():
+    # Logout User
+    global loggedin
+    loggedin = False
+    session.pop('loggedin', None)
+    session.pop('username', None)
+    session.pop('password', None)
     return redirect('/about')
 
 @app.route('/signup',methods=['GET', 'POST'])
 def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    else:
-        user_form = SignUpForm()
+    user_form = SignUpForm()
+    if request.method == 'POST':
         if user_form.validate_on_submit() and valid_team(user_form.team.data):
             # Insert the new scout's attributes into database
             cur = mysql.connection.cursor()
             cur.execute("""INSERT INTO Scouts VALUES (%s, %s, %s, %s)""", (user_form.email.data, user_form.username.data, user_form.password.data, user_form.team.data))
             mysql.connection.commit()
             cur.close()
-            flash('account created.', 'success')
             return redirect(url_for('signin'))
         else:
             # account has invalid team or invalid input
-            return render_template('signup.html', form=user_form)
+            return "<h1> Team does not exist. Please restart sign up. </h1>"
+    return render_template('signup.html', form=user_form)
 
 def valid_team(team):
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT TeamName FROM Teams''')
-    rows = cur.fetchall()
-    teamExists = False
-    for row in rows:
-        if row[0] == team:
-            return True
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cur.execute('''SELECT * FROM Teams WHERE TeamName = %s''', (team,))
+    t = cur.fetchone()
+    if t:
+        return True
     return False
