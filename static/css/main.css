@@ -9,55 +9,28 @@ Released for free under the Creative Commons Attribution 3.0 license (templated.
 
 /*Own Styling*/
 
+
 body {
     background-color: lightblue;
 }
-.select {
-    padding-left: 150px;
-    text-align: center;
+.navbar.navbar-inverse .navbar-header .navbar-brand {
+  display: block;
+  text-align:center;
+  float: none;
+  vertical-align: top;
+}
+.navbar.navbar-inverse .navbar-header {
+  float: none;
 }
 .select {
-    padding-right: 700px;
+    white-space: nowrap;
+    padding-left: 500px;
+}
+.select {
+    padding-right: 400px;
     text-align:center;
 }
 .search #search-bar{
-    width: 1900px;
+    width: 1000px;
     height:50px;
-}
-.table ,.table-striped, .table-dark {
-    height: 1600px;
-    width: 500px;
-}
-.table_one {
-    border: 5px;
-    margin-top: 30px;
-    margin-right: -20px;
-    height: 100px;
-    width: 100px;
-}
-.table_two {
-    padding-top: 750px;
-    margin-top: 600px;
-    margin-right: 1000px;
-    margin-left:80px;
-    width: 200px;
-}
-.table_three {
-    padding-top: 1000px;
-    margin-top: 1700px;
-    margin-right: 20px;
-    margin-left: 70px;
-    width: 200px;
-    height: 100px;
-}
-
-.column {
-    float: left;
-    border: 2px;
-    height: 300px;
-  }
-  .custom {
-    margin-top: 30px;
-    margin-left: 280px;
-    width: 900px;
 }
