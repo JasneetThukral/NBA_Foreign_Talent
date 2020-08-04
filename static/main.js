@@ -56,20 +56,19 @@ function addvalues_two() {
             return TableData;
         }
 
-    
+        // var button = document.createElement("button");
+        // button.innerHTML = "Do Something";
+        
+        // // 2. Append somewhere
+        // var body = document.getElementsByTagName("body")[0];
+        // body.appendChild(button);
+        
+        // // 3. Add event handler
+        // button.addEventListener ("click", function() {
+        //   alert("did something");
+        // });
 
-function Insert_Data(TableData) {
-    var table = document.getElementById("del_table");
-    var tr="";
-    TableData.forEach(x=>{
-       tr+='<tr>';
-       tr+='<td>'+x.ID+'<td>'+x.PlayerID+'</td>'+'<td>'+x.PlayerName+'</td>'+'<td>'+x.Points+'</td>'+'<td>'+x.Assists+'</td>'+'<td>'+x.Rebounds+'</td>'
-       tr+='</tr>'
-  
-    })
-    table.innerHTML+=tr;
- 
-  } 
+
 // function Insert_Data() {
 //     var table = document.getElementById("del_table");
 //     var tr="";
@@ -83,292 +82,292 @@ function Insert_Data(TableData) {
 //     //Help......  
 //   } 
 //  TableData.shift();  // first row is the table header - so remove
-
+function Insert_Data(TableData) {
+    var button = document.createElement("button");
+    button.innerHTML = "Delete"
+    button.addEventListener("click", delrow_eight());
+    var table = document.getElementById("del_table");
+    var tr="";
+    TableData.forEach(x=>{
+       tr+='<tr>';
+       tr+='<td>'+x.ID+'<td>'+x.PlayerID+'</td>'+'<td>'+x.PlayerName+'</td>'+'<td>'+x.Points+'</td>'+'<td>'+x.Assists+'</td>'
+       tr+='</tr>'
+  
+    })
+    document.getElementById(del_table).appendChild(button);
+    document.getElementById('markup').innerText = button.outerHTML;
+    table.innerHTML+=tr;
+ 
+  } 
 function delrow_one() {
     var index, table = document.getElementById('del_table');
-      for(var i = 1; i < table.rows.length; i++)
-      {
+      
           table.rows[2].cells[5].onclick = function()
           {
               var c = confirm("Do you want to remove this player?");
               if(c === true)
               {
-                //   index = this.parentElement.rowIndex;
-                //   table.deleteRow(index);
+                  index = this.parentElement.rowIndex;
+                  table.deleteRow(index);
                 // var tr="null";
-                var tr="";
-                tr +='<tr>';
-                tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                tr+='</tr>'
-                table.rows[2].innerHTML = "";
-                table.rows[2].innerHTML = tr;
+                // var tr="";
+                // tr +='<tr>';
+                // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                // tr+='</tr>'
+                // table.rows[2].innerHTML = "";
+                // table.rows[2].innerHTML = tr;
               }
 
               
               //console.log(index);
           };
           
-        }
+        
     }
     function delrow_two() {
         var index, table = document.getElementById('del_table');
-          for(var i = 1; i < table.rows.length; i++)
-          {
+         
               table.rows[3].cells[5].onclick = function()
               {
                   var c = confirm("Do you want to remove this player?");
                   if(c === true)
                   {
-                    //   index = this.parentElement.rowIndex;
-                    //   table.deleteRow(index);
+                      index = this.parentElement.rowIndex;
+                      table.deleteRow(index);
                     // var tr="null";
-                    var tr="";
-                    tr +='<tr>';
-                    tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                    tr+='</tr>'
-                    table.rows[3].innerHTML = "";
-                    table.rows[3].innerHTML = tr;
+                    // var tr="";
+                    // tr +='<tr>';
+                    // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                    // tr+='</tr>'
+                    // table.rows[3].innerHTML = "";
+                    // table.rows[3].innerHTML = tr;
                   }
     
                   
                   //console.log(index);
               };
               
-            }
+        
         }
         function delrow_three() {
             var index, table = document.getElementById('del_table');
-              for(var i = 1; i < table.rows.length; i++)
-              {
+            
                   table.rows[4].cells[5].onclick = function()
                   {
                       var c = confirm("Do you want to remove this player?");
                       if(c === true)
                       {
-                        //   index = this.parentElement.rowIndex;
-                        //   table.deleteRow(index);
+                          index = this.parentElement.rowIndex;
+                          table.deleteRow(index);
                         // var tr="null";
-                        var tr="";
-                        tr +='<tr>';
-                        tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                        tr+='</tr>'
-                        table.rows[4].innerHTML = "";
-                        table.rows[4].innerHTML = tr;
+                        // var tr="";
+                        // tr +='<tr>';
+                        // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                        // tr+='</tr>'
+                        // table.rows[4].innerHTML = "";
+                        // table.rows[4].innerHTML = tr;
                       }
         
                       
                       //console.log(index);
                   };
                   
-                }
+                
             }
             function delrow_four() {
                 var index, table = document.getElementById('del_table');
-                  for(var i = 1; i < table.rows.length; i++)
-                  {
+                
                       table.rows[5].cells[5].onclick = function()
                       {
                           var c = confirm("Do you want to remove this player?");
                           if(c === true)
                           {
-                            //   index = this.parentElement.rowIndex;
-                            //   table.deleteRow(index);
+                              index = this.parentElement.rowIndex;
+                              table.deleteRow(index);
                             // var tr="null";
-                            var tr="";
-                            tr +='<tr>';
-                            tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                            tr+='</tr>'
-                            table.rows[5].innerHTML = "";
-                            table.rows[5].innerHTML = tr;
+                           
                           }
             
                           
                           //console.log(index);
                       };
                       
-                    }
+                
                 }
                 function delrow_five() {
                     var index, table = document.getElementById('del_table');
-                      for(var i = 1; i < table.rows.length; i++)
-                      {
+                    
                           table.rows[6].cells[5].onclick = function()
                           {
                               var c = confirm("Do you want to remove this player?");
                               if(c === true)
                               {
-                                //   index = this.parentElement.rowIndex;
-                                //   table.deleteRow(index);
+                                  index = this.parentElement.rowIndex;
+                                  table.deleteRow(index);
                                 // var tr="null";
-                                var tr="";
-                                tr +='<tr>';
-                                tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                tr+='</tr>'
-                                table.rows[6].innerHTML = "";
-                                table.rows[6].innerHTML = tr;
+                                // var tr="";
+                                // tr +='<tr>';
+                                // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                // tr+='</tr>'
+                                // table.rows[6].innerHTML = "";
+                                // table.rows[6].innerHTML = tr;
                               }
                 
                               
                               //console.log(index);
                           };
                           
-                        }
+                    
                     }
                     function delrow_six() {
                         var index, table = document.getElementById('del_table');
-                          for(var i = 1; i < table.rows.length; i++)
-                          {
+                      
                               table.rows[7].cells[5].onclick = function()
                               {
                                   var c = confirm("Do you want to remove this player?");
                                   if(c === true)
                                   {
-                                    //   index = this.parentElement.rowIndex;
-                                    //   table.deleteRow(index);
+                                      index = this.parentElement.rowIndex;
+                                      table.deleteRow(index);
                                     // var tr="null";
-                                    var tr="";
-                                    tr +='<tr>';
-                                    tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                    tr+='</tr>'
-                                    table.rows[7].innerHTML = "";
-                                    table.rows[7].innerHTML = tr;
+                                    // var tr="";
+                                    // tr +='<tr>';
+                                    // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                    // tr+='</tr>'
+                                    // table.rows[7].innerHTML = "";
+                                    // table.rows[7].innerHTML = tr;
                                   }
                     
                                   
                                   //console.log(index);
                               };
                               
-                            }
+                            
                         }
                         function delrow_seven() {
                             var index, table = document.getElementById('del_table');
-                              for(var i = 1; i < table.rows.length; i++)
-                              {
+                              
                                   table.rows[8].cells[5].onclick = function()
                                   {
                                       var c = confirm("Do you want to remove this player?");
                                       if(c === true)
                                       {
-                                        //   index = this.parentElement.rowIndex;
-                                        //   table.deleteRow(index);
+                                          index = this.parentElement.rowIndex;
+                                          table.deleteRow(index);
                                         // var tr="null";
-                                        var tr="";
-                                        tr +='<tr>';
-                                        tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                        tr+='</tr>'
-                                        table.rows[8].innerHTML = "";
-                                        table.rows[8].innerHTML = tr;
+                                        // var tr="";
+                                        // tr +='<tr>';
+                                        // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                        // tr+='</tr>'
+                                        // table.rows[8].innerHTML = "";
+                                        // table.rows[8].innerHTML = tr;
                                       }
                         
                                       
                                       //console.log(index);
                                   };
                                   
-                                }
+                                
                             }
                             function delrow_eight() {
                                 var index, table = document.getElementById('del_table');
-                                  for(var i = 1; i < table.rows.length; i++)
-                                  {
+                                  
                                       table.rows[9].cells[5].onclick = function()
                                       {
                                           var c = confirm("Do you want to remove this player?");
                                           if(c === true)
                                           {
-                                            //   index = this.parentElement.rowIndex;
-                                            //   table.deleteRow(index);
+                                              index = this.parentElement.rowIndex;
+                                              table.deleteRow(index);
                                             // var tr="null";
-                                            var tr="";
-                                            tr +='<tr>';
-                                            tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                            tr+='</tr>'
-                                            table.rows[9].innerHTML = "";
-                                            table.rows[9].innerHTML = tr;
+                                            // var tr="";
+                                            // tr +='<tr>';
+                                            // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                            // tr+='</tr>'
+                                            // table.rows[9].innerHTML = "";
+                                            // table.rows[9].innerHTML = tr;
                                           }
                             
                                           
                                           //console.log(index);
                                       };
                                       
-                                    }
+                                
                                 }
                                 function delrow_nine() {
                                     var index, table = document.getElementById('del_table');
-                                      for(var i = 1; i < table.rows.length; i++)
-                                      {
+                                      
                                           table.rows[10].cells[5].onclick = function()
                                           {
                                               var c = confirm("Do you want to remove this player?");
                                               if(c === true)
                                               {
-                                                //   index = this.parentElement.rowIndex;
-                                                //   table.deleteRow(index);
+                                                  index = this.parentElement.rowIndex;
+                                                  table.deleteRow(index);
                                                 // var tr="null";
-                                                var tr="";
-                                                tr +='<tr>';
-                                                tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                                tr+='</tr>'
-                                                table.rows[10].innerHTML = "";
-                                                table.rows[10].innerHTML = tr;
+                                                // var tr="";
+                                                // tr +='<tr>';
+                                                // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                                // tr+='</tr>'
+                                                // table.rows[10].innerHTML = "";
+                                                // table.rows[10].innerHTML = tr;
                                               }
                                 
                                               
                                               //console.log(index);
                                           };
                                           
-                                        }
+                                    
                                     }
                                     function delrow_ten() {
                                         var index, table = document.getElementById('del_table');
-                                          for(var i = 1; i < table.rows.length; i++)
-                                          {
+                                          
                                               table.rows[11].cells[5].onclick = function()
                                               {
                                                   var c = confirm("Do you want to remove this player?");
                                                   if(c === true)
                                                   {
-                                                    //   index = this.parentElement.rowIndex;
-                                                    //   table.deleteRow(index);
+                                                      index = this.parentElement.rowIndex;
+                                                      table.deleteRow(index);
                                                     // var tr="null";
-                                                    var tr="";
-                                                    tr +='<tr>';
-                                                    tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                                    tr+='</tr>'
-                                                    table.rows[11].innerHTML = "";
-                                                    table.rows[11].innerHTML = tr;
+                                                    // var tr="";
+                                                    // tr +='<tr>';
+                                                    // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                                    // tr+='</tr>'
+                                                    // table.rows[11].innerHTML = "";
+                                                    // table.rows[11].innerHTML = tr;
                                                   }
                                     
                                                   
                                                   //console.log(index);
                                               };
                                               
-                                            }
+                                        
                                         }
                                         function delrow_eleven() {
                                             var index, table = document.getElementById('del_table');
-                                              for(var i = 1; i < table.rows.length; i++)
-                                              {
+                                             
                                                   table.rows[12].cells[5].onclick = function()
                                                   {
                                                       var c = confirm("Do you want to remove this player?");
                                                       if(c === true)
                                                       {
-                                                        //   index = this.parentElement.rowIndex;
-                                                        //   table.deleteRow(index);
+                                                          index = this.parentElement.rowIndex;
+                                                          table.deleteRow(index);
                                                         // var tr="null";
-                                                        var tr="";
-                                                        tr +='<tr>';
-                                                        tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                                        tr+='</tr>'
-                                                        table.rows[12].innerHTML = "";
-                                                        table.rows[12].innerHTML = tr;
+                                                        // var tr="";
+                                                        // tr +='<tr>';
+                                                        // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                                        // tr+='</tr>'
+                                                        // table.rows[12].innerHTML = "";
+                                                        // table.rows[12].innerHTML = tr;
                                                       }
                                         
                                                       
                                                       //console.log(index);
                                                   };
                                                   
-                                                }
+                                                
                                             }
                                             // function delrow_twelve() {
                                             //     var index, table = document.getElementById('del_table');
@@ -403,15 +402,15 @@ function delrow_one() {
                                                               var c = confirm("Do you want to remove this player?");
                                                               if(c === true)
                                                               {
-                                                                //   index = this.parentElement.rowIndex;
-                                                                //   table.deleteRow(index);
+                                                                  index = this.parentElement.rowIndex;
+                                                                  table.deleteRow(index);
                                                                 // var tr="null";
-                                                                var tr="";
-                                                                tr +='<tr>';
-                                                                tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                                                tr+='</tr>'
-                                                                table.rows[13].innerHTML = "";
-                                                                table.rows[13].innerHTML = tr;
+                                                                // var tr="";
+                                                                // tr +='<tr>';
+                                                                // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                                                // tr+='</tr>'
+                                                                // table.rows[13].innerHTML = "";
+                                                                // table.rows[13].innerHTML = tr;
                                                               }
                                                 
                                                               
@@ -422,29 +421,28 @@ function delrow_one() {
                     
                                                 function delrow_thirteen() {
                                                     var index, table = document.getElementById('del_table');
-                                                      for(var i = 1; i < table.rows.length; i++)
-                                                      {
+                                                      
                                                           table.rows[14].cells[5].onclick = function()
                                                           {
                                                               var c = confirm("Do you want to remove this player?");
                                                               if(c === true)
                                                               {
-                                                                //   index = this.parentElement.rowIndex;
-                                                                //   table.deleteRow(index);
+                                                                  index = this.parentElement.rowIndex;
+                                                                  table.deleteRow(index);
                                                                 // var tr="null";
-                                                                var tr="";
-                                                                tr +='<tr>';
-                                                                tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
-                                                                tr+='</tr>'
-                                                                table.rows[14].innerHTML = "";
-                                                                table.rows[14].innerHTML = tr;
+                                                                // var tr="";
+                                                                // tr +='<tr>';
+                                                                // tr+='<td>'+"null"+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'+'<td>'+"null"+'</td>'
+                                                                // tr+='</tr>'
+                                                                // table.rows[14].innerHTML = "";
+                                                                // table.rows[14].innerHTML = tr;
                                                               }
                                                 
                                                               
                                                               //console.log(index);
                                                           };
                                                           
-                                                        }
+                                                        
                                                     }
                                                     
                                                       
@@ -506,7 +504,7 @@ function delrow_one() {
                       
                     
                 
-
+    
     delrow_one();
     delrow_two();
     delrow_three();
