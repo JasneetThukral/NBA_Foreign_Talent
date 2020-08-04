@@ -30,13 +30,21 @@ def displayhome():
         # Team Roster
         ros_cur = mysql.connection.cursor()
         ros_cur.execute('''SELECT P.PlayerID, P.PlayerName, S.Points, S.Assists, S.Rebounds
-                        FROM Scouts Sc JOIN Teams T ON (Sc.Team = T.TeamName)
-                        JOIN Players P ON (P.TeamName = T.TeamName)
-                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)''')
+                        FROM Scouts Sc
+                        JOIN Teams T ON (Sc.Team = T.TeamName)
+                        JOIN Players P ON (T.TeamName = P.TeamName)
+                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)
+                        ORDER BY Points DESC, Assists DESC, Rebounds DESC''')
         players = ros_cur.fetchall()
         players_holder = []
+
+        #filter out excess ids
+        id_checker = {}
+
         for row in players:
-            players_holder.append([int(row[0]), str(row[1]), float(row[2]), float(row[3]), float(row[4])])
+            if int(row[0]) not in id_checker:
+                players_holder.append([int(row[0]), str(row[1]), float(row[2]), float(row[3]), float(row[4])])
+            id_checker[row[0]] = 1
 
         # Team Statistics
         stat_cur = mysql.connection.cursor()
@@ -48,18 +56,18 @@ def displayhome():
         stats = stat_cur.fetchall()
         stats_cur = []
         for row in stats:
-            stats_cur.append(float(row[0]))
-            stats_cur.append(float(row[1]))
-            stats_cur.append(float(row[2]))
+            stats_cur.append(round(float(row[0]),2))
+            stats_cur.append(round(float(row[1]),2))
+            stats_cur.append(round(float(row[2]),2))
 
         # Recommendations
-        return render_template('home.html', login=True, user_players=players_holder, )
+        # rec_return = simulation()
+        rec_cur = []
+        # for row in rec_return:
+            # rec_cur.append([int(row[0]), str(row[1]), int(row[2]), int(row[3]), int(row[4])])
+        return render_template('home.html', user_players=players_holder, team_stats=stats_cur, rec_play=rec_cur)
     else:
         return "<h1> Log in to see your user data. </h1>"
-
-@app.route('/favorites', methods=['GET', 'POST'])
-def displayfavorites():
-    return ""
 
 @app.route('/signin',methods=['GET', 'POST'])
 def signin():
