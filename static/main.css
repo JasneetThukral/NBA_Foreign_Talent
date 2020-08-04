@@ -33,12 +33,20 @@ body {
 }
 .table_two {
     margin-top: 30px;
+<<<<<<< HEAD
     margin-left:80px;
+=======
+    margin-left:100px;
+>>>>>>> 948c414bbb14364efcb5d1a4c137e71bef6fb364
 }
 .table_three {
     margin-top: 30px;
     margin-right: 20px;
+<<<<<<< HEAD
     margin-left: 70px;
+=======
+    margin-left: 100px;
+>>>>>>> 948c414bbb14364efcb5d1a4c137e71bef6fb364
 }
 
 .column {
