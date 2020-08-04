@@ -2,6 +2,15 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 from fantasybasketball import app, mysql
 from fantasybasketball.authentication import SignUpForm, SignInForm
 import MySQLdb.cursors
+from fantasybasketball.advanced_function import simulation
+import pandas as pd
+import itertools
+import numpy as np
+from patsy import dmatrices
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
+from sklearn.linear_model import LinearRegression
+import csv
 
 loggedin = False
 
@@ -18,9 +27,35 @@ def displayhome():
     # Change later to display specific scout's team's information
     global loggedin
     if loggedin:
-        render_template('home.html', login=True)
+        # Team Roster
+        ros_cur = mysql.connection.cursor()
+        ros_cur.execute('''SELECT P.PlayerID, P.PlayerName, S.Points, S.Assists, S.Rebounds
+                        FROM Scouts Sc JOIN Teams T ON (Sc.Team = T.TeamName)
+                        JOIN Players P ON (P.TeamName = T.TeamName)
+                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)''')
+        players = ros_cur.fetchall()
+        players_holder = []
+        for row in players:
+            players_holder.append([int(row[0]), str(row[1]), float(row[2]), float(row[3]), float(row[4])])
+
+        # Team Statistics
+        stat_cur = mysql.connection.cursor()
+        stat_cur.execute('''SELECT AVG(S.Points) AS Points, AVG(S.Assists) AS Assists, AVG(S.Rebounds) AS Rebounds
+                        FROM Scouts Sc JOIN Teams T ON (Sc.Team = T.TeamName)
+                        JOIN Players P ON (P.TeamName = T.TeamName)
+                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)
+                        GROUP BY T.TeamName''')
+        stats = stat_cur.fetchall()
+        stats_cur = []
+        for row in stats:
+            stats_cur.append(float(row[0]))
+            stats_cur.append(float(row[1]))
+            stats_cur.append(float(row[2]))
+
+        # Recommendations
+        return render_template('home.html', login=True, user_players=players_holder, )
     else:
-        render_template('home.html', login=False)
+        return "<h1> Log in to see your user data. </h1>"
 
 @app.route('/favorites', methods=['GET', 'POST'])
 def displayfavorites():
