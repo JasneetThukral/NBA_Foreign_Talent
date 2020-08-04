@@ -53,6 +53,7 @@ def displayhome():
             stats_cur.append(float(row[2]))
 
         # Recommendations
+        simulation()
         return render_template('home.html', login=True, user_players=players_holder, )
     else:
         return "<h1> Log in to see your user data. </h1>"

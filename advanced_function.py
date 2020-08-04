@@ -90,7 +90,7 @@ def simulation():
     # firstThreeStr = ""
     # firstThreeStr = ",".join(firstThreeStrConvert)
     # cur_4 = mysql.connection.cursor()
-    # top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, P.TeamName FROM Players P WHERE P.PlayerID IN (" + firstThreeStr + ")"
+    # top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
     # output_four = cur_4.execute(top3PlayersQuery)
     # top3Players = cur_4.fetchall()
     # print(top3Players)
@@ -174,14 +174,14 @@ def simulation():
     firstThreeStr = ""
     firstThreeStr = ",".join(firstThreeStrConvert)
     cur_4 = mysql.connection.cursor()
-    top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, P.TeamName FROM Players P WHERE P.PlayerID IN (" + firstThreeStr + ")"
+    top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
     output_four = cur_4.execute(top3PlayersQuery)
     top3Players = cur_4.fetchall()
     print(top3Players)
 
     top_players = []
     top_players.append(top3Players[0])
-    return # python list of top 3 players with
+    return # python list of top 3 players with the 5 attributes that neil has in chat P.PlayerID, P.PlayerName, S.Points, S.Assists, S.Rebounds 
 
     #TODO:Figure out how to format the top 3 information to give back to front end (prob will pass these values in when I renderTemplate)
     # if Loggedin:
