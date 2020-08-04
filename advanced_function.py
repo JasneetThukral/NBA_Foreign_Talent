@@ -8,6 +8,7 @@ from statsmodels.tools.tools import add_constant
 from sklearn.linear_model import LinearRegression
 import csv
 from fantasybasketball import app, mysql
+verifyAttributes = []
 
 def simulation():
     #TODO: Front End: Give all of the player IDs that exists in team roster when the user clicks delete

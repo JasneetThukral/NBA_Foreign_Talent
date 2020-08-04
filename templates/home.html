@@ -8,50 +8,28 @@
   </form>
 </div>
 
-<!-- <div class="container">
-  <div class="row">
-    <div class="col-12"> <h3><center>Player Recommendations</center></h3>
-      <table class="table table-bordered" style="background-color: white;">
-        <thead>
-          <tr>
-            <th scope="col">PlayerID</th>
-            <th scope="col">PlayerName</th>
-            <th scope="col">Points</th>
-            <th scope="col">Assists</th>
-            <th scope="col">Rebounds</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for player in rec_play %}
-            <tr>
-              <th scope="row">{{ player[0] }}</th>
-              <td>{{ player[1] }}</td>
-              <td>{{ player[2] }}</td>
-              <td>{{ player[3] }}</td>
-              <td>{{ player[4] }}</td>
-              <td>
-                <button type="button" class="btn btn-primary"><i class="bi bi-plus"></i></button>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div> -->
 
+  <h4>Predict Top 3 Players</h4>
+  <h5> Please wait for this table to populate before you click another button </h5>
+    <Button type = "button">VIF</Button>
+    <Button type = "button">KCross</Button>
+    
 
-<div class="list-group">
-  <h3><center>Team Statistics</center></h3>
-<ul class="list-group">
-  <li class="list-group-item"><center>Points: {{ team_stats[0] }}</center></li>
-  <li class="list-group-item"><center>Assists: {{ team_stats[1] }}</center></li>
-  <li class="list-group-item"><center>Rebounds: {{ team_stats[2] }}</center></li>
-</ul>
-</div>
+<dl>
+  <dt>First Player Reccomendation </dt>
+  <dd>- PlayerId</dd>
+  <dd>- PlayerName</dd>
+  <dd>- Points</dd>
+  <dt>Second Player Reccomendation</dt>
+  <dd>- PlayerId</dd>
+  <dd>- PlayerName</dd>
+  <dd>- Points</dd>
+  <dt> Third Player Reccomendation </dt>
+  <dd>- PlayerId</dd>
+  <dd>- PlayerName</dd>
+  <dd>- Points</dd>
 
-<!-- Table implementation -->
+</dl>
 <style>
 body {
     color: #404E67;
@@ -62,7 +40,7 @@ body {
     width: 700px;
     margin: 30px auto;
     background: #fff;
-    padding: 20px;
+    padding: 20px;	
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 .table-title {
@@ -105,7 +83,7 @@ table.table td a {
     display: inline-block;
     margin: 0 5px;
     min-width: 24px;
-}
+}    
 table.table td a.add {
     color: #27C46B;
 }
@@ -123,10 +101,9 @@ table.table td a.add i {
     margin-right: -1px;
     position: relative;
     top: 3px;
-}
+}    
 table.table .form-control {
     height: 32px;
-    width: 40px;
     line-height: 32px;
     box-shadow: none;
     border-radius: 2px;
@@ -137,6 +114,50 @@ table.table .form-control.error {
 table.table td .add {
     display: none;
 }
+/* Dropdown Button */
+.dropbtn {
+      background-color: #3498DB;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Dropdown button on hover & focus */
+    .dropbtn:hover, .dropbtn:focus {
+      background-color: #2980B9;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {background-color: #ddd}
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {display:block;}
 </style>
 <script>
 $(document).ready(function(){
@@ -147,14 +168,12 @@ $(document).ready(function(){
 		$(this).attr("disabled", "disabled");
 		var index = $("table tbody tr:last-child").index();
         var row = '<tr>' +
-            '<td><input type="text" class="form-control" name="PlayerID" id="PlayerID"></td>' +
-            '<td><input type="text" class="form-control" name="PlayerName" id="PlayerName"></td>' +
-            '<td><input type="text" class="form-control" name="Points" id="Points"></td>' +
-            '<td><input type="text" class="form-control" name="Assists" id="Assists"></td>' +
-            '<td><input type="text" class="form-control" name="Rebounds" id="Rebounds"></td>' +
+            '<td><input type="text" class="form-control" name="name" id="name"></td>' +
+            '<td><input type="text" class="form-control" name="department" id="department"></td>' +
+            '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
 			'<td>' + actions + '</td>' +
         '</tr>';
-    	$("table").append(row);
+    	$("table").append(row);		
 		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -174,16 +193,16 @@ $(document).ready(function(){
 		if(!empty){
 			input.each(function(){
 				$(this).parent("td").html($(this).val());
-			});
+			});			
 			$(this).parents("tr").find(".add, .edit").toggle();
 			$(".add-new").removeAttr("disabled");
-		}
+		}		
     });
 	// Edit row on edit button click
-	$(document).on("click", ".edit", function(){
+	$(document).on("click", ".edit", function(){		
         $(this).parents("tr").find("td:not(:last-child)").each(function(){
 			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-		});
+		});		
 		$(this).parents("tr").find(".add, .edit").toggle();
 		$(".add-new").attr("disabled", "disabled");
     });
@@ -194,14 +213,14 @@ $(document).ready(function(){
     });
 });
 </script>
-
+</head>
 <body>
 <div class="container-lg">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Team Members</h2></div>
+                    <div class="col-sm-8"><h2>Team <b>Roster</b></h2></div>
                     <div class="col-sm-4">
                         <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
                     </div>
@@ -210,22 +229,18 @@ $(document).ready(function(){
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>PlayerID</th>
-                        <th>PlayerName</th>
+                        <th>Player ID</th>
+                        <th>Player Name</th>
                         <th>Points</th>
-                      	<th>Assists</th>
-                      	<th>Rebounds</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                  {% for player in user_players %}
+                    {% for player in user_players %}
                     <tr>
-                      	<td>{{ player[0] }}</td>
+                        <td>{{ player[0] }}</td>
                         <td>{{ player[1] }}</td>
                         <td>{{ player[2] }}</td>
-                        <td>{{ player[3] }}</td>
-                      	<td>{{ player[4] }}</td>
                         <td>
                             <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
@@ -233,10 +248,22 @@ $(document).ready(function(){
                         </td>
                     </tr>
                   {% endfor %}
+
                 </tbody>
             </table>
         </div>
     </div>
-</div>
+</div> 
+<!-- Create button here to run the query to populate items based on the player IDs from team roster -->
+<Button type = 'button'> Calculate new Team Statistics </Button>
+<div class="list-group">
+    <h3><center>Team Statistics</center></h3>
+  <ul class="list-group">
+    <li class="list-group-item"><center>Points: {{ team_stats[0] }}</center></li>
+    <li class="list-group-item"><center>Assists: {{ team_stats[1] }}</center></li>
+    <li class="list-group-item"><center>Rebounds: {{ team_stats[2] }}</center></li>
+  </ul>
+  </div>
 </body>
+</html>
 {% endblock content %}
