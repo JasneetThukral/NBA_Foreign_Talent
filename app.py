@@ -248,6 +248,10 @@ def simulation():
     top3Players = cur_4.fetchall()
     print(top3Players)
     #TODO:Figure out how to format the top 3 information to give back to front end (prob will pass these values in when I renderTemplate)
+    # if Loggedin:
+    #   return returnedtemplate
+    # else:
+    #   return <h1>"You must logged in to see your user data"<\h1>
 
 
  
