@@ -6,7 +6,6 @@ from fantasybasketball.advanced_function import simulation,checkingToDropVariabl
 import pandas as pd
 import itertools
 import numpy as np
-from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
 from sklearn.linear_model import LinearRegression

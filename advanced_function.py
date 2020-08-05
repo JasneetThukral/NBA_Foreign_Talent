@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import pandas as pd
 import itertools
 import numpy as np
-from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
 from sklearn.linear_model import LinearRegression
