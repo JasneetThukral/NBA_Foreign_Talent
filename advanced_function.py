@@ -130,6 +130,7 @@ def simulation(typeModel, pIDs):
         #TODO: Figure out if the IDs from Front end is coming in as a string or as an array of numbers.
         #      If it is an array leave the next 2 lines, otherwise delete the next 2 lines.
         strPlayerIds = [str(x) for x in currentPlayerIds]
+        print(strPlayerIds)
         currentPlayerIdsStr = ""
         currentPlayerIdsStr = ','.join(strPlayerIds)
         currentPlayersQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
