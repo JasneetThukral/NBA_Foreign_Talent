@@ -43,10 +43,21 @@ def crud():
             a = request.form["PlayerId_Update"]
             b = request.form["Height_Update"]
             c = request.form["Weight_Update"]
-            cur = mysql.connection.cursor()
-            cur.execute("UPDATE Players SET Height=%s,Weight=%s WHERE PlayerId =%s",(b,c,a))
-            mysql.connection.commit()
-            cur.close()
+            if b and c:
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE Players SET Height=%s,Weight=%s WHERE PlayerId =%s",(b,c,a))
+                mysql.connection.commit()
+                cur.close()
+            elif b:
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE Players SET Height=%s WHERE PlayerId =%s",(b,a))
+                mysql.connection.commit()
+                cur.close()
+            elif c:
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE Players SET Weight=%s WHERE PlayerId =%s",(c,a))
+                mysql.connection.commit()
+                cur.close()
         elif request.form['submit'] == 'model':
             print("hello")
             checkingToDropVariables()
