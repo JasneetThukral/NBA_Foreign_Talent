@@ -11,14 +11,14 @@
 
 
 <dl>
-    <dt>First Player Reccomendation  </dt>
+    <dt>First Player Recommendation  </dt>
     <dd>PlayerId: {{sim_players[0][0]}}<br>PlayerName: {{sim_players[0][1]}}<br>Points:{{sim_players[0][2]}}<br>Assists:{{sim_players[0][3]}}<br>Rebounds:{{sim_players[0][4]}}</dd>
-    <dt>Second Player Reccomendation</dt>
+    <dt>Second Player Recommendation</dt>
     <dd>PlayerId: {{sim_players[1][0]}}<br>PlayerName: {{sim_players[1][1]}}<br>Points:{{sim_players[1][2]}}<br>Assists:{{sim_players[1][3]}}<br>Rebounds:{{sim_players[1][4]}}</dd>
-    <dt> Third Player Reccomendation </dt>
+    <dt> Third Player Recommendation </dt>
     <dd>PlayerId: {{sim_players[2][0]}}<br>PlayerName: {{sim_players[2][1]}}<br>Points:{{sim_players[2][2]}}<br>Assists:{{sim_players[2][3]}}<br>Rebounds:{{sim_players[2][4]}}</dd>
   </dl>
-    
+
 
 <style>
 dl {
@@ -52,7 +52,7 @@ body {
     width: 700px;
     margin: 30px auto;
     background: #fff;
-    padding: 20px;	
+    padding: 20px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 .table-title {
@@ -95,7 +95,7 @@ table.table td a {
     display: inline-block;
     margin: 0 5px;
     min-width: 24px;
-}    
+}
 table.table td a.add {
     color: #27C46B;
 }
@@ -113,7 +113,7 @@ table.table td a.add i {
     margin-right: -1px;
     position: relative;
     top: 3px;
-}    
+}
 table.table .form-control {
     height: 32px;
     line-height: 32px;
@@ -185,7 +185,7 @@ $(document).ready(function(){
             '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
 			'<td>' + actions + '</td>' +
         '</tr>';
-    	$("table").append(row);		
+    	$("table").append(row);
 		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -205,16 +205,16 @@ $(document).ready(function(){
 		if(!empty){
 			input.each(function(){
 				$(this).parent("td").html($(this).val());
-			});			
+			});
 			$(this).parents("tr").find(".add, .edit").toggle();
 			$(".add-new").removeAttr("disabled");
-		}		
+		}
     });
 	// Edit row on edit button click
-	$(document).on("click", ".edit", function(){		
+	$(document).on("click", ".edit", function(){
         $(this).parents("tr").find("td:not(:last-child)").each(function(){
 			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-		});		
+		});
 		$(this).parents("tr").find(".add, .edit").toggle();
 		$(".add-new").attr("disabled", "disabled");
     });
@@ -304,7 +304,7 @@ $(document).ready(function(){
             <td><input type="text" name="r8c3" value={{user_players[7][2]}} /></td>
             <td><input type="text" name="r8c4" value={{user_players[7][3]}} /></td>
             <td><input type="text" name="r8c5" value={{user_players[7][4]}} /></td>
-        </tr> 
+        </tr>
         <tr>
             <td><input type="text" name="r9c1" value={{user_players[8][0]}} /></td>
             <td><input type="text" name="r9c2" value={{user_players[8][1]}} /></td>
@@ -346,7 +346,7 @@ $(document).ready(function(){
             <td><input type="text" name="r14c3" value={{user_players[13][2]}} /></td>
             <td><input type="text" name="r14c4" value={{user_players[13][3]}} /></td>
             <td><input type="text" name="r14c5" value={{user_players[13][4]}} /></td>
-        </tr>   
+        </tr>
         <tr>
             <td><input type="text" name="r15c1" value={{user_players[14][0]}} /></td>
             <td><input type="text" name="r15c2" value={{user_players[14][1]}} /></td>
@@ -381,7 +381,7 @@ $(document).ready(function(){
             <td><input type="text" name="r19c3" value={{user_players[18][2]}} /></td>
             <td><input type="text" name="r19c4" value={{user_players[18][3]}} /></td>
             <td><input type="text" name="r19c5" value={{user_players[18][4]}} /></td>
-        </tr>   
+        </tr>
         <tr>
             <td><input type="text" name="r20c1" value={{user_players[19][0]}} /></td>
             <td><input type="text" name="r20c2" value={{user_players[19][1]}} /></td>
@@ -402,7 +402,7 @@ $(document).ready(function(){
             <td><input type="text" name="r22c3" value={{user_players[21][2]}} /></td>
             <td><input type="text" name="r22c4" value={{user_players[21][3]}} /></td>
             <td><input type="text" name="r22c5" value={{user_players[21][4]}} /></td>
-        </tr>   
+        </tr>
         <tr>
             <td><input type="text" name="r23c1" value={{user_players[22][0]}} /></td>
             <td><input type="text" name="r23c2" value={{user_players[22][1]}} /></td>
@@ -423,7 +423,7 @@ $(document).ready(function(){
             <td><input type="text" name="r25c3" value={{user_players[24][2]}}/></td>
             <td><input type="text" name="r25c4" value={{user_players[24][3]}} /></td>
             <td><input type="text" name="r25c5" value={{user_players[24][4]}} /></td>
-        </tr>   
+        </tr>
         </table>
         <h4>Choose your Model</h4>
         <Button type = "submit" name = "submit" value="VIF">VIF</Button>
@@ -431,9 +431,9 @@ $(document).ready(function(){
          <br>
         <!-- <p><input type = "submit" value = "submit" /></p> -->
     </form>
-    
-        
-    
+
+
+
 <!-- <div class="container-lg">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -468,12 +468,12 @@ $(document).ready(function(){
                         </td>
                     </tr>
                   {% endfor %}
-                  <tr> 
+                  <tr>
                     <form>
                         <td name id = "null_one">
                             null
                         </td>
-                    </form> 
+                    </form>
                     <td>"null"</td>
                     <td>"null"</td>
                     <td>
@@ -483,7 +483,7 @@ $(document).ready(function(){
                     </td>
                   </tr>
                   <tr>
-                    <form> 
+                    <form>
                     <td id = "null_two">null
                     </td>
                 </form>
@@ -495,7 +495,7 @@ $(document).ready(function(){
                         <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                     </td>
                   </tr>
-                  <tr> 
+                  <tr>
                     <form>
                     <td id = "null_three">null</td>
                 </form>
@@ -507,7 +507,7 @@ $(document).ready(function(){
                         <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                     </td>
                   </tr>
-                  
+
 
                 </tbody>
             </table>
