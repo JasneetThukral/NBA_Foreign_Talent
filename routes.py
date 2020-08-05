@@ -13,12 +13,13 @@ from sklearn.linear_model import LinearRegression
 import csv
 
 loggedin = False
-
+currentTeam = ""
 
 @app.route('/crud', methods=['GET', 'POST'])
 def crud():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S")
+    query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID)"
+    cur.execute("SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID)")
     output = cur.fetchall()
     if request.method == 'POST':
         if request.form['submit'] == 'add':
@@ -60,44 +61,49 @@ def crud():
             f = request.form["Min_Weight_Search"]
             g = request.form["Max_Weight_Search"]
 
-            query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE PlayerName LIKE '%" + str(a) + "%'"
+            query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE PlayerName LIKE '%" + str(a) + "%'"
             if b:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P NATURAL JOIN Statistics S JOIN Teams T ON (P.TeamName = T.TeamName) WHERE P.TeamName = '" + str(b) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) JOIN Teams T ON (P.TeamName = T.TeamName) WHERE P.TeamName = '" + str(b) + "'"
             if a and b:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P NATURAL JOIN Statistics S JOIN Teams T ON (P.TeamName = T.TeamName) WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) JOIN Teams T ON (P.TeamName = T.TeamName) WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
 
             if c and (a or b):
                 query += " AND Positions = '" + str(c) + "'"
             elif c:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Positions = '" + str(c) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Positions = '" + str(c) + "'"
 
             if d and (a or b or c):
                 query += " AND Height >= " + d
             elif d:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height >= " + d
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Height >= " + d
 
             if e and (a or b or c or d):
                 query += " AND Height <= " + e
             elif e:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height <= " + e
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Height <= " + e
 
             if f and (a or b or c or d or e):
                 query += " AND Weight >= " + f
             elif f:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Weight >= " + f
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Weight >= " + f
 
             if g and (a or b or c or d or e or f):
                 query += " AND Height <= " + g
             elif g:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height <= " + g
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Height <= " + g
 
             query += " ORDER BY Points DESC, Assists DESC, Rebounds DESC"
             cur.execute(query)
             output = cur.fetchall()
+            cur.close()
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        output = cur.fetchall()
+        cur.close()
         # cur.close()
-    #cur = mysql.connection.cursor()
-    #cur.execute("SELECT * FROM Players")
-    #output = cur.fetchall()
+    # cur = mysql.connection.cursor()
+    # cur.execute(query)
+    # output = cur.fetchall()
     # cur.close()
 
     return render_template("crud.html", output = output)
@@ -139,9 +145,10 @@ def displayhome():
                 arrPlayerIds.append(request.form[place])
             temp = []
             for id in arrPlayerIds:
-                if id != '0':
+                if id != '0' and id != "":
                     temp.append(id)
             arrPlayerIds = temp
+            print(arrPlayerIds)
             model = ""
             if request.form['submit'] == 'KCross':
                 model = "KCross"
@@ -159,17 +166,12 @@ def displayhome():
             print(result_new_stat)
             stats_cur = result_new_stat[0]
 
-
-
         print(sim_arr)
         # Team Roster
         ros_cur = mysql.connection.cursor()
-        ros_cur.execute('''SELECT DISTINCT(P.PlayerID), P.PlayerName, S.Points,S.Assists,S.Rebounds
-                        FROM Scouts Sc
-                        JOIN Teams T ON (Sc.Team = T.TeamName)
-                        JOIN Players P ON (T.TeamName = P.TeamName)
-                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)
-                        ORDER BY Points DESC, Assists DESC, Rebounds DESC''')
+        ros_cur_qur = "SELECT DISTINCT(P.PlayerID), P.PlayerName, S.Points,S.Assists,S.Rebounds FROM Scouts Sc JOIN Teams T ON (Sc.Team = T.TeamName) JOIN Players P ON (T.TeamName = P.TeamName) JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE Sc.Team = '" + currentTeam + "' ORDER BY Points DESC, Assists DESC, Rebounds DESC"
+        ros_cur.execute(ros_cur_qur)
+
         players = ros_cur.fetchall()
         players_holder = []
         lengthPlayers = len(players)
@@ -227,11 +229,15 @@ def signin():
             cur.execute('''SELECT * FROM Scouts WHERE Username = %s AND Password = %s AND Email = %s''', (user_form.username.data, user_form.password.data, user_form.email.data,))
             user = cur.fetchone()
             if user:
+                global currentTeam
                 loggedin = True
                 session['loggedin'] = True
                 session['username'] = user['Username']
                 session['password'] = user['Password']
                 session['email'] = user['Email']
+                session['team'] = user['Team']
+                currentTeam = session['team']
+                print(currentTeam)
                 # Login User and display their information
                 return redirect('/home')
             else:
