@@ -8,185 +8,183 @@ from statsmodels.tools.tools import add_constant
 from sklearn.linear_model import LinearRegression
 import csv
 from fantasybasketball import app, mysql
+verifyAttributes = []
 
-def simulation():
+def simulation(typeModel, pIDs):
     #TODO: Front End: Give all of the player IDs that exists in team roster when the user clicks delete
         #This is hardcoded right now below for testing purposes --> These are 3 player Ids (first 2 from NBA Team (GSW), last one from Euro or Greek League(AEKAthens))
-    currentPlayerIds = [625, 639, 116]
+    currentPlayerIds = pIDs
 
-    # #TODO: Front End: check to see if toggle button is either vif
-    # attr_values = pd.read_csv("vif_model.csv")
-    # data = pd.read_csv("NBARankings.csv")
-    # rankings = data["rankings"].values
-    # rankings = np.array(rankings)
+    #TODO: Front End: check to see if toggle button is either vif
+    if (typeModel == "VIF"):
+        attr_values = pd.read_csv("vif_model.csv")
+        data = pd.read_csv("NBARankings.csv")
+        rankings = data["rankings"].values
+        rankings = np.array(rankings)
 
-    # #build vif model using csv file and sklearn
-    # x_values = attr_values.values.tolist()
-    # x_values = np.array(x_values)
+        #build vif model using csv file and sklearn
+        x_values = attr_values.values.tolist()
+        x_values = np.array(x_values)
 
-    # vif_lr = LinearRegression().fit(x_values, np.transpose(rankings))
+        vif_lr = LinearRegression().fit(x_values, np.transpose(rankings))
 
-    # #Add attributes to an array and modify for proper syntax to send to query
-    # headers = []
-    # queryAttrArr = []
-    # queryAttr = ""
-    # for col_name in attr_values.columns:
-    #     headers.append(col_name)
-    # for header in headers:
-    #     header = "S." + header + ", "
-    #     queryAttrArr.append(header)
-    # queryAttrArr[len(queryAttrArr) - 1] = queryAttrArr[len(queryAttrArr) - 1].replace(",", '')
-    # queryAttr = queryAttr.join(queryAttrArr)
+        #Add attributes to an array and modify for proper syntax to send to query
+        headers = []
+        queryAttrArr = []
+        queryAttr = ""
+        for col_name in attr_values.columns:
+            headers.append(col_name)
+        for header in headers:
+            header = "S." + header + ", "
+            queryAttrArr.append(header)
+        queryAttrArr[len(queryAttrArr) - 1] = queryAttrArr[len(queryAttrArr) - 1].replace(",", '')
+        queryAttr = queryAttr.join(queryAttrArr)
 
-    # # Write query to get the average stats of the attributes from queryAttr from
-    # cur = mysql.connection.cursor()
-    # #TODO: Figure out if the IDs from Front end is coming in as a string or as an array of numbers.
-    # #      If it is an array leave the next 2 lines, otherwise delete the next 2 lines.
-    # strPlayerIds = [str(x) for x in currentPlayerIds]
-    # currentPlayerIdsStr = ""
-    # currentPlayerIdsStr = ','.join(strPlayerIds)
-    # currentPlayersQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
-    # output = cur.execute(currentPlayersQuery)
-    # valuesOfCurrentTeam = cur.fetchall()
+        # Write query to get the average stats of the attributes from queryAttr from
+        cur = mysql.connection.cursor()
+        #TODO: Figure out if the IDs from Front end is coming in as a string or as an array of numbers.
+        #      If it is an array leave the next 2 lines, otherwise delete the next 2 lines.
+        strPlayerIds = [str(x) for x in currentPlayerIds]
+        currentPlayerIdsStr = ""
+        currentPlayerIdsStr = ','.join(strPlayerIds)
+        currentPlayersQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
+        output = cur.execute(currentPlayersQuery)
+        valuesOfCurrentTeam = cur.fetchall()
 
-    # # average each element
-    # arr = [list(x) for x in valuesOfCurrentTeam]
-    # numPlayers = (len(arr))
-    # npArr = np.array(arr)
-    # npArr = np.mean(npArr, axis=0)
-    # averageCurrentPlayersStats = npArr.tolist()
+        # average each element
+        arr = [list(x) for x in valuesOfCurrentTeam]
+        numPlayers = (len(arr))
+        npArr = np.array(arr)
+        npArr = np.mean(npArr, axis=0)
+        averageCurrentPlayersStats = npArr.tolist()
 
-    # #Find all of the playerIDs that I can predict --> No NBA Players, no current player ids
-    # cur_2 = mysql.connection.cursor()
-    # possiblePlayersQuery = "SELECT P.PlayerID FROM Players P NATURAL JOIN Teams T WHERE P.PlayerID NOT IN(" + currentPlayerIdsStr + ") AND T.NumGames NOT IN (82)"
-    # output_two = cur_2.execute(possiblePlayersQuery)
-    # possiblePlayers = cur_2.fetchall()
-    # possiblePlayersId = [x[0] for x in possiblePlayers]
+        #Find all of the playerIDs that I can predict --> No NBA Players, no current player ids
+        cur_2 = mysql.connection.cursor()
+        possiblePlayersQuery = "SELECT P.PlayerID FROM Players P NATURAL JOIN Teams T WHERE P.PlayerID NOT IN(" + currentPlayerIdsStr + ") AND T.NumGames NOT IN (82)"
+        output_two = cur_2.execute(possiblePlayersQuery)
+        possiblePlayers = cur_2.fetchall()
+        possiblePlayersId = [x[0] for x in possiblePlayers]
 
-    # #loop through all of the player IDs, add into listNpArr, average again, send to predict function, get the highest ranking
-    # predictedRankings = []
-    # for eachId in possiblePlayersId:
-    #     cur_3 = mysql.connection.cursor()
-    #     predictPlayerStatsQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + str(eachId) + ")"
-    #     output_three = cur_3.execute(predictPlayerStatsQuery)
-    #     thisPlayer = cur_3.fetchall()
-    #     newPlayerStats = list(thisPlayer[0])
+        #loop through all of the player IDs, add into listNpArr, average again, send to predict function, get the highest ranking
+        predictedRankings = []
+        for eachId in possiblePlayersId:
+            cur_3 = mysql.connection.cursor()
+            predictPlayerStatsQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + str(eachId) + ")"
+            output_three = cur_3.execute(predictPlayerStatsQuery)
+            thisPlayer = cur_3.fetchall()
+            newPlayerStats = list(thisPlayer[0])
 
-    #     #calculate new average
-    #     newTeamAverage = []
-    #     for x in range(len(averageCurrentPlayersStats)):
-    #         newAverage = ((averageCurrentPlayersStats[x] * numPlayers) + newPlayerStats[x])/(numPlayers + 1)
-    #         newTeamAverage.append(newAverage)
-    #     newTeamAverage = np.array(newTeamAverage)
-    #     ranking = vif_lr.predict(np.transpose(newTeamAverage).reshape(1,-1))
-    #     predictedRankings.append([list(ranking), eachId])
-    # predictedRankings = sorted(predictedRankings, key=lambda x: x[0], reverse=False)
-    # firstThree = []
-    # firstThree.append(predictedRankings[0][1])
-    # firstThree.append(predictedRankings[1][1])
-    # firstThree.append(predictedRankings[2][1])
+            #calculate new average
+            newTeamAverage = []
+            for x in range(len(averageCurrentPlayersStats)):
+                newAverage = ((averageCurrentPlayersStats[x] * numPlayers) + newPlayerStats[x])/(numPlayers + 1)
+                newTeamAverage.append(newAverage)
+            newTeamAverage = np.array(newTeamAverage)
+            ranking = vif_lr.predict(np.transpose(newTeamAverage).reshape(1,-1))
+            predictedRankings.append([list(ranking), eachId])
+        predictedRankings = sorted(predictedRankings, key=lambda x: x[0], reverse=False)
+        firstThree = []
+        firstThree.append(predictedRankings[0][1])
+        firstThree.append(predictedRankings[1][1])
+        firstThree.append(predictedRankings[2][1])
 
-    # firstThreeStrConvert = [str(x) for x in firstThree]
-    # firstThreeStr = ""
-    # firstThreeStr = ",".join(firstThreeStrConvert)
-    # cur_4 = mysql.connection.cursor()
-    # top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, P.TeamName FROM Players P WHERE P.PlayerID IN (" + firstThreeStr + ")"
-    # output_four = cur_4.execute(top3PlayersQuery)
-    # top3Players = cur_4.fetchall()
-    # print(top3Players)
+        firstThreeStrConvert = [str(x) for x in firstThree]
+        firstThreeStr = ""
+        firstThreeStr = ",".join(firstThreeStrConvert)
+        cur_4 = mysql.connection.cursor()
+        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName,S.Points,S.Assists,S.Rebounds FROM Players P natural join Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
+        output_four = cur_4.execute(top3PlayersQuery)
+        top3Players = cur_4.fetchall()
+        return top3Players
     # #TODO:Figure out how to format the top 3 information to give back to front end (prob will pass these values in when I renderTemplate)
 
 
     #TODO:check to see if toggle button is either k_cross
     # Create helper function the parameter should be which attributes to use for simulations
-    attr_values = pd.read_csv("kcross_model.csv")
-    data = pd.read_csv("NBARankings.csv")
-    rankings = data["rankings"].values
-    rankings = np.array(rankings)
+    elif (typeModel == "KCross"):
+        attr_values = pd.read_csv("kcross_model.csv")
+        data = pd.read_csv("NBARankings.csv")
+        rankings = data["rankings"].values
+        rankings = np.array(rankings)
 
-    #build vif model using csv file and sklearn
-    x_values = attr_values.values.tolist()
-    x_values = np.array(x_values)
+        #build vif model using csv file and sklearn
+        x_values = attr_values.values.tolist()
+        x_values = np.array(x_values)
 
-    vif_lr = LinearRegression().fit(x_values, np.transpose(rankings))
+        vif_lr = LinearRegression().fit(x_values, np.transpose(rankings))
 
-    #Add attributes to an array and modify for proper syntax to send to query
-    headers = []
-    queryAttrArr = []
-    queryAttr = ""
-    for col_name in attr_values.columns:
-        headers.append(col_name)
-    for header in headers:
-        header = "S." + header + ", "
-        queryAttrArr.append(header)
-    queryAttrArr[len(queryAttrArr) - 1] = queryAttrArr[len(queryAttrArr) - 1].replace(",", '')
-    queryAttr = queryAttr.join(queryAttrArr)
+        #Add attributes to an array and modify for proper syntax to send to query
+        headers = []
+        queryAttrArr = []
+        queryAttr = ""
+        for col_name in attr_values.columns:
+            headers.append(col_name)
+        for header in headers:
+            header = "S." + header + ", "
+            queryAttrArr.append(header)
+        queryAttrArr[len(queryAttrArr) - 1] = queryAttrArr[len(queryAttrArr) - 1].replace(",", '')
+        queryAttr = queryAttr.join(queryAttrArr)
 
-    # Write query to get the average stats of the attributes from queryAttr from
-    cur = mysql.connection.cursor()
-    #TODO: Figure out if the IDs from Front end is coming in as a string or as an array of numbers.
-    #      If it is an array leave the next 2 lines, otherwise delete the next 2 lines.
-    strPlayerIds = [str(x) for x in currentPlayerIds]
-    currentPlayerIdsStr = ""
-    currentPlayerIdsStr = ','.join(strPlayerIds)
-    currentPlayersQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
-    output = cur.execute(currentPlayersQuery)
-    valuesOfCurrentTeam = cur.fetchall()
+        # Write query to get the average stats of the attributes from queryAttr from
+        cur = mysql.connection.cursor()
+        #TODO: Figure out if the IDs from Front end is coming in as a string or as an array of numbers.
+        #      If it is an array leave the next 2 lines, otherwise delete the next 2 lines.
+        strPlayerIds = [str(x) for x in currentPlayerIds]
+        currentPlayerIdsStr = ""
+        currentPlayerIdsStr = ','.join(strPlayerIds)
+        currentPlayersQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
+        output = cur.execute(currentPlayersQuery)
+        valuesOfCurrentTeam = cur.fetchall()
 
-    # average each element
-    arr = [list(x) for x in valuesOfCurrentTeam]
-    numPlayers = (len(arr))
-    npArr = np.array(arr)
-    npArr = np.mean(npArr, axis=0)
-    averageCurrentPlayersStats = npArr.tolist()
+        # average each element
+        arr = [list(x) for x in valuesOfCurrentTeam]
+        numPlayers = (len(arr))
+        npArr = np.array(arr)
+        npArr = np.mean(npArr, axis=0)
+        averageCurrentPlayersStats = npArr.tolist()
 
-    #Find all of the playerIDs that I can predict --> No NBA Players, no current player ids
-    cur_2 = mysql.connection.cursor()
-    possiblePlayersQuery = "SELECT P.PlayerID FROM Players P NATURAL JOIN Teams T WHERE P.PlayerID NOT IN(" + currentPlayerIdsStr + ") AND T.NumGames NOT IN (82)"
-    output_two = cur_2.execute(possiblePlayersQuery)
-    possiblePlayers = cur_2.fetchall()
-    possiblePlayersId = [x[0] for x in possiblePlayers]
+        #Find all of the playerIDs that I can predict --> No NBA Players, no current player ids
+        cur_2 = mysql.connection.cursor()
+        possiblePlayersQuery = "SELECT P.PlayerID FROM Players P NATURAL JOIN Teams T WHERE P.PlayerID NOT IN(" + currentPlayerIdsStr + ") AND T.NumGames NOT IN (82)"
+        output_two = cur_2.execute(possiblePlayersQuery)
+        possiblePlayers = cur_2.fetchall()
+        possiblePlayersId = [x[0] for x in possiblePlayers]
 
-    #loop through all of the player IDs, add into listNpArr, average again, send to predict function, get the highest ranking
-    predictedRankings = []
-    for eachId in possiblePlayersId:
-        cur_3 = mysql.connection.cursor()
-        predictPlayerStatsQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + str(eachId) + ")"
-        output_three = cur_3.execute(predictPlayerStatsQuery)
-        thisPlayer = cur_3.fetchall()
-        newPlayerStats = list(thisPlayer[0])
+        #loop through all of the player IDs, add into listNpArr, average again, send to predict function, get the highest ranking
+        predictedRankings = []
+        for eachId in possiblePlayersId:
+            cur_3 = mysql.connection.cursor()
+            predictPlayerStatsQuery = "SELECT " + queryAttr + "FROM Statistics S NATURAL JOIN Players P WHERE P.PlayerID IN (" + str(eachId) + ")"
+            output_three = cur_3.execute(predictPlayerStatsQuery)
+            thisPlayer = cur_3.fetchall()
+            newPlayerStats = list(thisPlayer[0])
 
-        #calculate new average
-        newTeamAverage = []
-        for x in range(len(averageCurrentPlayersStats)):
-            newAverage = ((averageCurrentPlayersStats[x] * numPlayers) + newPlayerStats[x])/(numPlayers + 1)
-            newTeamAverage.append(newAverage)
-        newTeamAverage = np.array(newTeamAverage)
-        ranking = vif_lr.predict(np.transpose(newTeamAverage).reshape(1,-1))
-        predictedRankings.append([list(ranking), eachId])
-    predictedRankings = sorted(predictedRankings, key=lambda x: x[0], reverse=False)
-    firstThree = []
-    firstThree.append(predictedRankings[0][1])
-    firstThree.append(predictedRankings[1][1])
-    firstThree.append(predictedRankings[2][1])
+            #calculate new average
+            newTeamAverage = []
+            for x in range(len(averageCurrentPlayersStats)):
+                newAverage = ((averageCurrentPlayersStats[x] * numPlayers) + newPlayerStats[x])/(numPlayers + 1)
+                newTeamAverage.append(newAverage)
+            newTeamAverage = np.array(newTeamAverage)
+            ranking = vif_lr.predict(np.transpose(newTeamAverage).reshape(1,-1))
+            predictedRankings.append([list(ranking), eachId])
+        predictedRankings = sorted(predictedRankings, key=lambda x: x[0], reverse=False)
+        firstThree = []
+        firstThree.append(predictedRankings[0][1])
+        firstThree.append(predictedRankings[1][1])
+        firstThree.append(predictedRankings[2][1])
 
-    firstThreeStrConvert = [str(x) for x in firstThree]
-    firstThreeStr = ""
-    firstThreeStr = ",".join(firstThreeStrConvert)
-    cur_4 = mysql.connection.cursor()
-    top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
-    output_four = cur_4.execute(top3PlayersQuery)
-    top3Players = cur_4.fetchall()
-    print(top3Players)
-    return top3Players
-    # python list of top 3 players with
+        firstThreeStrConvert = [str(x) for x in firstThree]
+        firstThreeStr = ""
+        firstThreeStr = ",".join(firstThreeStrConvert)
+        cur_4 = mysql.connection.cursor()
+        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName,S.Points,S.Assists,S.Rebounds FROM Players P natural join Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
+        output_four = cur_4.execute(top3PlayersQuery)
+        top3Players = cur_4.fetchall()
+        print(top3Players)
+        return top3Players
+        # python list of top 3 players with
 
-    #TODO:Figure out how to format the top 3 information to give back to front end (prob will pass these values in when I renderTemplate)
-    # if Loggedin:
-    #   return returnedtemplate
-    # else:
-    #   return <h1>"You must logged in to see your user data"<\h1>
-
+    
 def checkingToDropVariables():
     cur = mysql.connection.cursor()
     qu = 'SELECT AVG(S.FieldGoalAttempts), AVG(S.FieldGoalPercent), AVG(S.ThreePointAttempts), AVG(S.ThreePointPercent), AVG(S.TwoPointAttempts), AVG(S.TwoPointPercent), AVG(S.EFieldGoal), AVG(S.FreeThrowAttempts), AVG(S.FreeThrowPercent), AVG(S.Rebounds), AVG(S.Assists), AVG(S.Steals), AVG(S.Blocks), AVG(S.Turnovers), AVG(S.PersonalFouls), AVG(S.Points) FROM Teams T NATURAL JOIN Players P JOIN Statistics S ON (P.PlayerID = S.PlayerID) WHERE T.NumGames = 82 GROUP BY T.TeamName'
