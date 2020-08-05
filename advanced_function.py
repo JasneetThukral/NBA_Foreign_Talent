@@ -272,7 +272,8 @@ def checkingToDropVariables():
     df = pd.read_csv("vif_model.csv", header=None)
     attr_values = df.to_csv("vif_model.csv", header=csv_labels, index=False)
 
-    r_values()
+    print(vifDrops)
+    
     return
 
 def r_values():

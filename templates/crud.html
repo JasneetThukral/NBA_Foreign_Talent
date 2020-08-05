@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<h2> Settings </h2>
+<form action = "/crud" method = "POST">
+
+    <p>ADD PLAYER</p>
+    <p>Player Id: <input type = "number" name = "Player_Add" /></p>
+    <p>Name: <input type = "text" name = "Name_Add" /></p>
+    <p>TeamName: <input type = "text" name = "TeamName_Add" /></p>
+    <p>Position: <input type ="text" name = "Position_Add" /></p>
+    <p>Height: <input type = "number" name = "Height_Add" /></p>
+    <p>Weight: <input type = "number" name = "Weight_Add" /></p>
+    <Button type = "submit" name = "submit" value="add">Add Player</Button>
+
+    <p>DELETE PLAYER</p>
+    <p>Player Id: <input type = "number" name = "PlayerId_Delete" /></p>
+    <Button type = "submit" name = "submit" value="delete">Delete Player</Button>
+
+    <p>UPDATE PLAYER</p>
+    <p>Player Id: <input type = "number" name = "PlayerId_Update" /></p>
+    <p>Height: <input type = "number" name = "Height_Update" /></p>
+    <p>Weight: <input type = "number" name = "Weight_Update" /></p>
+    <Button type = "submit" name = "submit" value="update">Update Player</Button>
+
+    <p>SEARCH PLAYER</p>
+    <p>Player Name: <input type = "text" name = "Name_Search" /></p>
+    <p>Team Name: <input type = "text" name = "Team_Search" /></p>
+    <p>Position: <input type = "text" name = "Position_Search" /></p>
+    <p>Minimum Height: <input type="text" name="Min_Height_Search" /></p>
+    <p>Maximum Height: <input type="text" name="Max_Height_Search" /></p>
+    <p>Minimum Weight: <input type="text" name="Min_Weight_Search" /></p>
+    <p>Maximum Weight: <input type="text" name="Max_Weight_Search" /></p>
+    <Button type = "submit" name = "submit" value="search">Search Player</Button>
+
+    <Button type = "submit" name = "submit" value="model">Create New ML Model</Button>
+
+    {% if output[0]|length <= 6 %}
+      <table class="table table-striped table-light">
+          <thead>
+            <tr>
+              <th scope="col">Player ID</th>
+              <th scope="col">Player Name</th>
+              <th scope="col">Team</th>
+              <th scope="col">Position</th>
+              <th scope="col">Height</th>
+              <th scope="col">Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in output %}
+              <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
+
+    {% if output[0]|length > 6 %}
+      <table class="table table-striped table-light">
+          <thead>
+            <tr>
+              <th scope="col">Player ID</th>
+              <th scope="col">Player Name</th>
+              <th scope="col">Team</th>
+              <th scope="col">Position</th>
+              <th scope="col">Height</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Wins</th>
+              <th scope="col">Losses</th>
+              <th scope="col">NumGames</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in output %}
+              <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
+
+ {% endblock content %}
