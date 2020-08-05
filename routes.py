@@ -2,7 +2,7 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 from fantasybasketball import app, mysql
 from fantasybasketball.authentication import SignUpForm, SignInForm
 import MySQLdb.cursors
-from fantasybasketball.advanced_function import simulation
+from fantasybasketball.advanced_function import simulation,checkingToDropVariables,machineLearning
 import pandas as pd
 import itertools
 import numpy as np
@@ -15,6 +15,48 @@ import csv
 loggedin = False
 
 
+@app.route('/crud', methods=['GET', 'POST'])
+def crud():
+    if request.method == 'POST':
+        if request.form['submit'] == 'add':   
+            a = request.form["Player_Add"]
+            b= request.form["Name_Add"]
+            z = request.form["TeamName_Add"]
+            c =  request.form["Position_Add"]
+            d=  request.form["Height_Add"]
+            e= request.form["Weight_Add"]
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO Players Values(%s, %s, %s, %s, %s, %s)",(a,b,z,c,d,e))
+            mysql.connection.commit()
+            cur.close()
+        elif request.form['submit'] == 'delete':
+            a = request.form["PlayerId_Delete"]
+            cur = mysql.connection.cursor()
+            cur.execute("DELETE FROM Players WHERE PlayerId = %s",(a,))
+            mysql.connection.commit()
+            cur.close()
+        elif request.form['submit'] == 'update':
+            a = request.form["PlayerId_Update"]
+            b = request.form["Height_Update"]
+            c = request.form["Weight_Update"]
+            cur = mysql.connection.cursor()
+            cur.execute("UPDATE Players SET Height=%s,Weight=%s WHERE PlayerId =%s",(b,c,a))
+            mysql.connection.commit()
+            cur.close()
+        elif request.form['submit'] == 'model':
+            print("hello")
+            checkingToDropVariables()
+            # machineLearning()
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM Players")
+        output = cur.fetchall()
+        # cur.close()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Players")
+    output = cur.fetchall()
+    # cur.close()
+
+    return render_template("crud.html",output = output)
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
