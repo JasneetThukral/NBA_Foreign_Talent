@@ -17,8 +17,11 @@ loggedin = False
 
 @app.route('/crud', methods=['GET', 'POST'])
 def crud():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Players")
+    output = cur.fetchall()
     if request.method == 'POST':
-        if request.form['submit'] == 'add':   
+        if request.form['submit'] == 'add':
             a = request.form["Player_Add"]
             b= request.form["Name_Add"]
             z = request.form["TeamName_Add"]
@@ -47,16 +50,56 @@ def crud():
             print("hello")
             checkingToDropVariables()
             # machineLearning()
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM Players")
-        output = cur.fetchall()
+        if request.form['submit'] == 'search':
+            cur = mysql.connection.cursor()
+            a = request.form["Name_Search"]
+            b = request.form["Team_Search"]
+            c = request.form["Position_Search"]
+            d = request.form["Min_Height_Search"]
+            e = request.form["Max_Height_Search"]
+            f = request.form["Min_Weight_Search"]
+            g = request.form["Max_Weight_Search"]
+
+            query = "SELECT * FROM Players WHERE PlayerName LIKE '%" + str(a) + "%'"
+            if b:
+                query = "SELECT * FROM Players NATURAL JOIN Teams WHERE Players.TeamName = '" + str(b) + "'"
+            if a and b:
+                query = "SELECT * FROM Players NATURAL JOIN Teams WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
+
+            if c and (a or b):
+                query += " AND Positions = '" + str(c) + "'"
+            elif c:
+                query = "SELECT * FROM Players WHERE Positions = '" + str(c) + "'"
+
+            if d and (a or b or c):
+                query += " AND Height >= " + d
+            elif d:
+                query = "SELECT * FROM Players WHERE Height >= " + d
+
+            if e and (a or b or c or d):
+                query += " AND Height <= " + e
+            elif e:
+                query = "SELECT * FROM Players WHERE Height <= " + e
+
+            if f and (a or b or c or d or e):
+                query += " AND Weight >= " + f
+            elif f:
+                query = "SELECT * FROM Players WHERE Weight >= " + f
+
+            if g and (a or b or c or d or e or f):
+                query += " AND Height <= " + g
+            elif g:
+                query = "SELECT * FROM Players WHERE Height <= " + g
+
+            cur.execute(query)
+            output = cur.fetchall()
         # cur.close()
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Players")
-    output = cur.fetchall()
+    #cur = mysql.connection.cursor()
+    #cur.execute("SELECT * FROM Players")
+    #output = cur.fetchall()
     # cur.close()
 
-    return render_template("crud.html",output = output)
+    return render_template("crud.html", output = output)
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
@@ -68,7 +111,7 @@ def displayabout():
 
 @app.route('/home', methods=['GET', 'POST'])
 def displayhome():
-    
+
 
     # Change later to display specific scout's team's information
     global loggedin
@@ -114,13 +157,13 @@ def displayhome():
             result_new_stat = new_stat_cur.fetchall()
             print(result_new_stat)
             stats_cur = result_new_stat[0]
-            
+
 
 
         print(sim_arr)
         # Team Roster
         ros_cur = mysql.connection.cursor()
-        ros_cur.execute('''SELECT DISTINCT(P.PlayerID), P.PlayerName, S.Points,S.Assists,S.Rebounds 
+        ros_cur.execute('''SELECT DISTINCT(P.PlayerID), P.PlayerName, S.Points,S.Assists,S.Rebounds
                         FROM Scouts Sc
                         JOIN Teams T ON (Sc.Team = T.TeamName)
                         JOIN Players P ON (T.TeamName = P.TeamName)
@@ -135,10 +178,10 @@ def displayhome():
         fillLength = 25 - len(players)
         for x in range(fillLength):
             players_holder.append([0,"Insert Name",0.0, 0.0, 0.0])
-    
+
         # Team Statistics
-        #Check to see 
-       
+        #Check to see
+
 
         # Recommendations
         # Check to see if button from front end has been clicked to run simulation(machine learning algo) here
@@ -151,7 +194,7 @@ def displayhome():
         # if button has been clicked
         #   checkingToDropVariables()
         #   machineLearning()
-        
+
         # Decide which model user selects
         # print("Outside Function")
         # model = "VIF"
@@ -165,7 +208,7 @@ def displayhome():
         #         print("VIF")
         #         model = "VIF"
         #         simulation(model, arrPlayerIds)
-        
+
         return render_template('home.html', user_players=players_holder, team_stats=stats_cur,sim_players = sim_arr)
     else:
         return "<h1> Log in to see your user data. </h1>"

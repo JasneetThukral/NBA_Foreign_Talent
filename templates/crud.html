@@ -22,34 +22,76 @@
     <p>Weight: <input type = "number" name = "Weight_Update" /></p>
     <Button type = "submit" name = "submit" value="update">Update Player</Button>
 
+    <p>SEARCH PLAYER</p>
+    <p>Player Name: <input type = "text" name = "Name_Search" /></p>
+    <p>Team Name: <input type = "text" name = "Team_Search" /></p>
+    <p>Position: <input type = "text" name = "Position_Search" /></p>
+    <p>Minimum Height: <input type="text" name="Min_Height_Search" /></p>
+    <p>Maximum Height: <input type="text" name="Max_Height_Search" /></p>
+    <p>Minimum Weight: <input type="text" name="Min_Weight_Search" /></p>
+    <p>Maximum Weight: <input type="text" name="Max_Weight_Search" /></p>
+    <Button type = "submit" name = "submit" value="search">Search Player</Button>
+
     <Button type = "submit" name = "submit" value="model">Create New ML Model</Button>
 
-
-    <table class="table table-striped table-light">
-        <thead>
-          <tr>
-            <th scope="col">Player ID</th>
-            <th scope="col">Player Name</th>
-            <th scope="col">Team</th>
-            <th scope="col">Position</th>
-            <th scope="col">Height</th>
-            <th scope="col">Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in output %}
+    {% if output[0]|length <= 6 %}
+      <table class="table table-striped table-light">
+          <thead>
             <tr>
-              <td>{{ row[0] }}</td>
-              <td>{{ row[1] }}</td>
-              <td>{{ row[2] }}</td>
-              <td>{{ row[3] }}</td>
-              <td>{{ row[4] }}</td>
-              <td>{{ row[5] }}</td>
+              <th scope="col">Player ID</th>
+              <th scope="col">Player Name</th>
+              <th scope="col">Team</th>
+              <th scope="col">Position</th>
+              <th scope="col">Height</th>
+              <th scope="col">Weight</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for row in output %}
+              <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
 
-
+    {% if output[0]|length > 6 %}
+      <table class="table table-striped table-light">
+          <thead>
+            <tr>
+              <th scope="col">Player ID</th>
+              <th scope="col">Player Name</th>
+              <th scope="col">Team</th>
+              <th scope="col">Position</th>
+              <th scope="col">Height</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Wins</th>
+              <th scope="col">Losses</th>
+              <th scope="col">NumGames</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in output %}
+              <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
 
  {% endblock content %}
