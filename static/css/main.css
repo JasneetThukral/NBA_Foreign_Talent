@@ -9,46 +9,28 @@ Released for free under the Creative Commons Attribution 3.0 license (templated.
 
 /*Own Styling*/
 
+
 body {
-    background-color: #7cb37a;
+    background-color: lightblue;
+}
+.navbar.navbar-inverse .navbar-header .navbar-brand {
+  display: block;
+  text-align:center;
+  float: none;
+  vertical-align: top;
+}
+.navbar.navbar-inverse .navbar-header {
+  float: none;
 }
 .select {
-    padding-left: 450px;
+    white-space: nowrap;
+    padding-left: 500px;
+}
+.select {
+    padding-right: 400px;
     text-align:center;
 }
 .search #search-bar{
-    width: 1900px;
+    width: 1000px;
     height:50px;
 }
-.table ,.table-striped, .table-dark {
-    height: 1400px;
-    width: 500px;
-}
-.table_one {
-    border: 5px;
-    margin-top: 30px;
-    margin-right: 20px;
-    margin-left: 40px;
-    height:100px;
-}
-.table_two {
-    margin-top: 30px;
-    margin-left:80px;
-}
-.table_three {
-    margin-top: 30px;
-    margin-right: 20px;
-    margin-left: 70px;
-}
-
-.column {
-    float: left;
-    border: 2px;
-    height: 300px;
-  }
-  .custom {
-    margin-top: 30px;
-    margin-left: 280px;
-    width: 900px;
-}
-
