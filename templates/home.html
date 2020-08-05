@@ -11,20 +11,19 @@
 
   <h4><center>Predict Top 3 Players</center></h4>
   <h5><center>Please wait for this table to populate before you click another button</center></h5>
-  <form action="/home" method="POST">
-    <Button type = "submit" name = "submit_button" value="VIF">VIF</Button>
-    <Button type = "submit" name = "submit_button" value="KCross">KCross</Button>
-</form>
-<form action=""
-<Button type = "submit" name = "run_button" value="Run">Run</Button>
+  <!-- <form action="/home" method="POST"> -->
+    <!-- <Button type = "submit" name = "submit_button" value="VIF">VIF</Button> -->
+    <!-- <Button type = "submit" name = "submit_button" value="KCross">KCross</Button> -->
+<!-- </form> -->
+
 
 <dl>
     <dt>First Player Reccomendation  </dt>
-    <dd>PlayerId <br>PlayerName <br> Points <br></dd>
+    <dd>PlayerId: {{sim_players[0][0]}}<br>PlayerName: {{sim_players[0][1]}}<br>Points:{{sim_players[0][2]}}<br>Assists:{{sim_players[0][3]}}<br>Rebounds:{{sim_players[0][4]}}</dd>
     <dt>Second Player Reccomendation</dt>
-    <dd>PlayerId <br>PlayerName <br> Points </dd>
+    <dd>PlayerId: {{sim_players[1][0]}}<br>PlayerName: {{sim_players[1][1]}}<br>Points:{{sim_players[1][2]}}<br>Assists:{{sim_players[1][3]}}<br>Rebounds:{{sim_players[1][4]}}</dd>
     <dt> Third Player Reccomendation </dt>
-    <dd>PlayerId <br>PlayerName <br> Points </dd>
+    <dd>PlayerId: {{sim_players[2][0]}}<br>PlayerName: {{sim_players[2][1]}}<br>Points:{{sim_players[2][2]}}<br>Assists:{{sim_players[2][3]}}<br>Rebounds:{{sim_players[2][4]}}</dd>
   </dl>
     
 
@@ -236,7 +235,8 @@ $(document).ready(function(){
 </head>
 <body>
     <h3><center>Team Roster</center></h3>
-    <form method="POST" action="http://localhost:5000/result">
+    <form method="POST" action="/home">
+
         <table>
             <!-- {% for player in user_players %}
                     <tr>
@@ -251,188 +251,192 @@ $(document).ready(function(){
                         </td>
                     </tr>
                   {% endfor %} -->
-        <th>player_id</th>
-        <th>stat_1</th>
-        <th>stat_2</th>
-        <th>stat_3</th>
-        <th>stat_4</th>
+        <th>Player ID</th>
+        <th>Player Name</th>
+        <th>Points</th>
+        <th>Assists</th>
+        <th>Rebounds</th>
         <tr>
-            <td><input type="text" name="r1c1" value="player_id" /></td>
-            <td><input type="text" name="r1c2" value="stat_1" /></td>
-            <td><input type="text" name="r1c3" value="stat_2" /></td>
-            <td><input type="text" name="r1c4" value="stat_3" /></td>
-            <td><input type="text" name="r1c5" value="stat_4" /></td>
+            <td><input type="text" name="r1c1" value= {{user_players[0][0]}} /></td>
+            <td><input type="text" name="r1c2" value={{user_players[0][1]}} /></td>
+            <td><input type="text" name="r1c3" value={{user_players[0][2]}} /></td>
+            <td><input type="text" name="r1c4" value={{user_players[0][3]}} /></td>
+            <td><input type="text" name="r1c5" value={{user_players[0][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r2c1" value="player_id" /></td>
-            <td><input type="text" name="r2c2" value="stat_1" /></td>
-            <td><input type="text" name="r2c3" value="stat_1" /></td>
-            <td><input type="text" name="r2c4" value="stat_1" /></td>
-            <td><input type="text" name="r2c5" value="stat_1" /></td>
+            <td><input type="text" name="r2c1" value={{user_players[1][0]}} /></td>
+            <td><input type="text" name="r2c2" value={{user_players[1][1]}} /></td>
+            <td><input type="text" name="r2c3" value={{user_players[1][2]}} /></td>
+            <td><input type="text" name="r2c4" value={{user_players[1][3]}} /></td>
+            <td><input type="text" name="r2c5" value={{user_players[1][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r3c1" value="" /></td>
-            <td><input type="text" name="r3c2" value="" /></td>
-            <td><input type="text" name="r3c3" value="" /></td>
-            <td><input type="text" name="r3c4" value="" /></td>
-            <td><input type="text" name="r3c5" value="" /></td>
+            <td><input type="text" name="r3c1" value={{user_players[2][0]}} /></td>
+            <td><input type="text" name="r3c2" value={{user_players[2][1]}} /></td>
+            <td><input type="text" name="r3c3" value={{user_players[2][2]}} /></td>
+            <td><input type="text" name="r3c4" value={{user_players[2][3]}} /></td>
+            <td><input type="text" name="r3c5" value={{user_players[2][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r4c1" value="" /></td>
-            <td><input type="text" name="r4c2" value="" /></td>
-            <td><input type="text" name="r4c3" value="" /></td>
-            <td><input type="text" name="r4c4" value="" /></td>
-            <td><input type="text" name="r4c5" value="" /></td>
+            <td><input type="text" name="r4c1" value={{user_players[3][0]}} /></td>
+            <td><input type="text" name="r4c2" value={{user_players[3][1]}} /></td>
+            <td><input type="text" name="r4c3" value={{user_players[3][2]}} /></td>
+            <td><input type="text" name="r4c4" value={{user_players[3][3]}} /></td>
+            <td><input type="text" name="r4c5" value={{user_players[3][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r5c1" value="" /></td>
-            <td><input type="text" name="r5c2" value="" /></td>
-            <td><input type="text" name="r5c3" value="" /></td>
-            <td><input type="text" name="r5c4" value="" /></td>
-            <td><input type="text" name="r5c5" value="" /></td>
+            <td><input type="text" name="r5c1" value={{user_players[4][0]}} /></td>
+            <td><input type="text" name="r5c2" value={{user_players[4][1]}} /></td>
+            <td><input type="text" name="r5c3" value={{user_players[4][2]}} /></td>
+            <td><input type="text" name="r5c4" value={{user_players[4][3]}} /></td>
+            <td><input type="text" name="r5c5" value={{user_players[4][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r6c1" value="" /></td>
-            <td><input type="text" name="r6c2" value="" /></td>
-            <td><input type="text" name="r6c3" value="" /></td>
-            <td><input type="text" name="r6c4" value="" /></td>
-            <td><input type="text" name="r6c5" value="" /></td>
+            <td><input type="text" name="r6c1" value={{user_players[5][0]}} /></td>
+            <td><input type="text" name="r6c2" value={{user_players[5][1]}} /></td>
+            <td><input type="text" name="r6c3" value={{user_players[5][2]}} /></td>
+            <td><input type="text" name="r6c4" value={{user_players[5][3]}} /></td>
+            <td><input type="text" name="r6c5" value={{user_players[5][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r7c1" value="" /></td>
-            <td><input type="text" name="r7c2" value="" /></td>
-            <td><input type="text" name="r7c3" value="" /></td>
-            <td><input type="text" name="r7c4" value="" /></td>
-            <td><input type="text" name="r7c5" value="" /></td>
+            <td><input type="text" name="r7c1" value={{user_players[6][0]}} /></td>
+            <td><input type="text" name="r7c2" value={{user_players[6][1]}} /></td>
+            <td><input type="text" name="r7c3" value={{user_players[6][2]}} /></td>
+            <td><input type="text" name="r7c4" value={{user_players[6][3]}} /></td>
+            <td><input type="text" name="r7c5" value={{user_players[6][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r8c1" value="" /></td>
-            <td><input type="text" name="r8c2" value="" /></td>
-            <td><input type="text" name="r8c3" value="" /></td>
-            <td><input type="text" name="r8c4" value="" /></td>
-            <td><input type="text" name="r8c5" value="" /></td>
+            <td><input type="text" name="r8c1" value={{user_players[7][0]}} /></td>
+            <td><input type="text" name="r8c2" value={{user_players[7][1]}} /></td>
+            <td><input type="text" name="r8c3" value={{user_players[7][2]}} /></td>
+            <td><input type="text" name="r8c4" value={{user_players[7][3]}} /></td>
+            <td><input type="text" name="r8c5" value={{user_players[7][4]}} /></td>
         </tr> 
         <tr>
-            <td><input type="text" name="r9c1" value="" /></td>
-            <td><input type="text" name="r9c2" value="" /></td>
-            <td><input type="text" name="r9c3" value="" /></td>
-            <td><input type="text" name="r9c4" value="" /></td>
-            <td><input type="text" name="r9c5" value="" /></td>
+            <td><input type="text" name="r9c1" value={{user_players[8][0]}} /></td>
+            <td><input type="text" name="r9c2" value={{user_players[8][1]}} /></td>
+            <td><input type="text" name="r9c3" value={{user_players[8][2]}} /></td>
+            <td><input type="text" name="r9c4" value={{user_players[8][3]}} /></td>
+            <td><input type="text" name="r9c5" value={{user_players[8][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r10c1" value="" /></td>
-            <td><input type="text" name="r10c2" value="" /></td>
-            <td><input type="text" name="r10c3" value="" /></td>
-            <td><input type="text" name="r10c4" value="" /></td>
-            <td><input type="text" name="r10c5" value="" /></td>
+            <td><input type="text" name="r10c1" value={{user_players[9][0]}} /></td>
+            <td><input type="text" name="r10c2" value={{user_players[9][1]}} /></td>
+            <td><input type="text" name="r10c3" value={{user_players[9][2]}} /></td>
+            <td><input type="text" name="r10c4" value={{user_players[9][3]}} /></td>
+            <td><input type="text" name="r10c5" value={{user_players[9][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r11c1" value="" /></td>
-            <td><input type="text" name="r11c2" value="" /></td>
-            <td><input type="text" name="r11c3" value="" /></td>
-            <td><input type="text" name="r11c4" value="" /></td>
-            <td><input type="text" name="r11c5" value="" /></td>
+            <td><input type="text" name="r11c1" value={{user_players[10][0]}} /></td>
+            <td><input type="text" name="r11c2" value={{user_players[10][1]}} /></td>
+            <td><input type="text" name="r11c3" value={{user_players[10][2]}} /></td>
+            <td><input type="text" name="r11c4" value={{user_players[10][3]}} /></td>
+            <td><input type="text" name="r11c5" value={{user_players[10][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r12c1" value="" /></td>
-            <td><input type="text" name="r12c2" value="" /></td>
-            <td><input type="text" name="r12c3" value="" /></td>
-            <td><input type="text" name="r12c4" value="" /></td>
-            <td><input type="text" name="r12c5" value="" /></td>
+            <td><input type="text" name="r12c1" value={{user_players[11][0]}} /></td>
+            <td><input type="text" name="r12c2" value={{user_players[11][1]}} /></td>
+            <td><input type="text" name="r12c3" value={{user_players[11][2]}} /></td>
+            <td><input type="text" name="r12c4" value={{user_players[11][3]}} /></td>
+            <td><input type="text" name="r12c5" value={{user_players[11][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r13c1" value="" /></td>
-            <td><input type="text" name="r132" value="" /></td>
-            <td><input type="text" name="r13c3" value="" /></td>
-            <td><input type="text" name="r13c4" value="" /></td>
-            <td><input type="text" name="r13c5" value="" /></td>
+            <td><input type="text" name="r13c1" value={{user_players[12][0]}} /></td>
+            <td><input type="text" name="r132" value={{user_players[12][1]}} /></td>
+            <td><input type="text" name="r13c3" value={{user_players[12][2]}} /></td>
+            <td><input type="text" name="r13c4" value={{user_players[12][3]}} /></td>
+            <td><input type="text" name="r13c5" value={{user_players[12][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r14c1" value="" /></td>
-            <td><input type="text" name="r14c2" value="" /></td>
-            <td><input type="text" name="r14c3" value="" /></td>
-            <td><input type="text" name="r14c4" value="" /></td>
-            <td><input type="text" name="r14c5" value="" /></td>
+            <td><input type="text" name="r14c1" value={{user_players[13][0]}} /></td>
+            <td><input type="text" name="r14c2" value={{user_players[13][1]}} /></td>
+            <td><input type="text" name="r14c3" value={{user_players[13][2]}} /></td>
+            <td><input type="text" name="r14c4" value={{user_players[13][3]}} /></td>
+            <td><input type="text" name="r14c5" value={{user_players[13][4]}} /></td>
         </tr>   
         <tr>
-            <td><input type="text" name="r15c1" value="" /></td>
-            <td><input type="text" name="r15c2" value="" /></td>
-            <td><input type="text" name="r15c3" value="" /></td>
-            <td><input type="text" name="r15c4" value="" /></td>
-            <td><input type="text" name="r15c5" value="" /></td>
+            <td><input type="text" name="r15c1" value={{user_players[14][0]}} /></td>
+            <td><input type="text" name="r15c2" value={{user_players[14][1]}} /></td>
+            <td><input type="text" name="r15c3" value={{user_players[14][2]}} /></td>
+            <td><input type="text" name="r15c4" value={{user_players[14][3]}} /></td>
+            <td><input type="text" name="r15c5" value={{user_players[14][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r16c1" value="" /></td>
-            <td><input type="text" name="r16c2" value="" /></td>
-            <td><input type="text" name="r16c3" value="" /></td>
-            <td><input type="text" name="r16c4" value="" /></td>
-            <td><input type="text" name="r16c5" value="" /></td>
+            <td><input type="text" name="r16c1" value={{user_players[15][0]}} /></td>
+            <td><input type="text" name="r16c2" value={{user_players[15][1]}} /></td>
+            <td><input type="text" name="r16c3" value={{user_players[15][2]}} /></td>
+            <td><input type="text" name="r16c4" value={{user_players[15][3]}} /></td>
+            <td><input type="text" name="r16c5" value={{user_players[15][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r17c1" value="" /></td>
-            <td><input type="text" name="r17c2" value="" /></td>
-            <td><input type="text" name="r17c3" value="" /></td>
-            <td><input type="text" name="r17c4" value="" /></td>
-            <td><input type="text" name="r17c5" value="" /></td>
+            <td><input type="text" name="r17c1" value={{user_players[16][0]}} /></td>
+            <td><input type="text" name="r17c2" value={{user_players[16][1]}} /></td>
+            <td><input type="text" name="r17c3" value={{user_players[16][2]}} /></td>
+            <td><input type="text" name="r17c4" value={{user_players[16][3]}} /></td>
+            <td><input type="text" name="r17c5" value={{user_players[16][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r18c1" value="" /></td>
-            <td><input type="text" name="r18c2" value="" /></td>
-            <td><input type="text" name="r18c3" value="" /></td>
-            <td><input type="text" name="r18c4" value="" /></td>
-            <td><input type="text" name="r18c5" value="" /></td>
+            <td><input type="text" name="r18c1" value={{user_players[17][0]}} /></td>
+            <td><input type="text" name="r18c2" value={{user_players[17][1]}} /></td>
+            <td><input type="text" name="r18c3" value={{user_players[17][2]}} /></td>
+            <td><input type="text" name="r18c4" value={{user_players[17][3]}} /></td>
+            <td><input type="text" name="r18c5" value={{user_players[17][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r19c1" value="" /></td>
-            <td><input type="text" name="r19c2" value="" /></td>
-            <td><input type="text" name="r19c3" value="" /></td>
-            <td><input type="text" name="r19c4" value="" /></td>
-            <td><input type="text" name="r19c5" value="" /></td>
+            <td><input type="text" name="r19c1" value={{user_players[18][0]}} /></td>
+            <td><input type="text" name="r19c2" value={{user_players[18][1]}} /></td>
+            <td><input type="text" name="r19c3" value={{user_players[18][2]}} /></td>
+            <td><input type="text" name="r19c4" value={{user_players[18][3]}} /></td>
+            <td><input type="text" name="r19c5" value={{user_players[18][4]}} /></td>
         </tr>   
         <tr>
-            <td><input type="text" name="r20c1" value="" /></td>
-            <td><input type="text" name="r20c2" value="" /></td>
-            <td><input type="text" name="r20c3" value="" /></td>
-            <td><input type="text" name="r20c4" value="" /></td>
-            <td><input type="text" name="r20c5" value="" /></td>
+            <td><input type="text" name="r20c1" value={{user_players[19][0]}} /></td>
+            <td><input type="text" name="r20c2" value={{user_players[19][1]}} /></td>
+            <td><input type="text" name="r20c3" value={{user_players[19][2]}} /></td>
+            <td><input type="text" name="r20c4" value={{user_players[19][3]}} /></td>
+            <td><input type="text" name="r20c5" value={{user_players[19][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r21c1" value="" /></td>
-            <td><input type="text" name="r21c2" value="" /></td>
-            <td><input type="text" name="r21c3" value="" /></td>
-            <td><input type="text" name="r21c4" value="" /></td>
-            <td><input type="text" name="r21c5" value="" /></td>
+            <td><input type="text" name="r21c1" value={{user_players[20][0]}} /></td>
+            <td><input type="text" name="r21c2" value={{user_players[20][1]}} /></td>
+            <td><input type="text" name="r21c3" value={{user_players[20][2]}} /></td>
+            <td><input type="text" name="r21c4" value={{user_players[20][3]}} /></td>
+            <td><input type="text" name="r21c5" value={{user_players[20][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r22c1" value="" /></td>
-            <td><input type="text" name="r22c2" value="" /></td>
-            <td><input type="text" name="r22c3" value="" /></td>
-            <td><input type="text" name="r22c4" value="" /></td>
-            <td><input type="text" name="r22c5" value="" /></td>
+            <td><input type="text" name="r22c1" value={{user_players[21][0]}} /></td>
+            <td><input type="text" name="r22c2" value={{user_players[21][1]}} /></td>
+            <td><input type="text" name="r22c3" value={{user_players[21][2]}} /></td>
+            <td><input type="text" name="r22c4" value={{user_players[21][3]}} /></td>
+            <td><input type="text" name="r22c5" value={{user_players[21][4]}} /></td>
         </tr>   
         <tr>
-            <td><input type="text" name="r23c1" value="" /></td>
-            <td><input type="text" name="r23c2" value="" /></td>
-            <td><input type="text" name="r23c3" value="" /></td>
-            <td><input type="text" name="r23c4" value="" /></td>
-            <td><input type="text" name="r23c5" value="" /></td>
+            <td><input type="text" name="r23c1" value={{user_players[22][0]}} /></td>
+            <td><input type="text" name="r23c2" value={{user_players[22][1]}} /></td>
+            <td><input type="text" name="r23c3" value={{user_players[22][2]}} /></td>
+            <td><input type="text" name="r23c4" value={{user_players[22][3]}} /></td>
+            <td><input type="text" name="r23c5" value={{user_players[22][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r24c1" value="" /></td>
-            <td><input type="text" name="r242" value="" /></td>
-            <td><input type="text" name="r24c3" value="" /></td>
-            <td><input type="text" name="r24c4" value="" /></td>
-            <td><input type="text" name="r24c5" value="" /></td>
+            <td><input type="text" name="r24c1" value={{user_players[23][0]}} /></td>
+            <td><input type="text" name="r242" value={{user_players[23][1]}} /></td>
+            <td><input type="text" name="r24c3" value={{user_players[23][2]}} /></td>
+            <td><input type="text" name="r24c4" value={{user_players[23][3]}} /></td>
+            <td><input type="text" name="r24c5" value={{user_players[23][4]}} /></td>
         </tr>
         <tr>
-            <td><input type="text" name="r25c1" value="" /></td>
-            <td><input type="text" name="r25c2" value="" /></td>
-            <td><input type="text" name="r25c3" value="" /></td>
-            <td><input type="text" name="r25c4" value="" /></td>
-            <td><input type="text" name="r25c5" value="" /></td>
+            <td><input type="text" name="r25c1" value={{user_players[24][0]}} /></td>
+            <td><input type="text" name="r25c2" value={{user_players[24][1]}} /></td>
+            <td><input type="text" name="r25c3" value={{user_players[24][2]}}/></td>
+            <td><input type="text" name="r25c4" value={{user_players[24][3]}} /></td>
+            <td><input type="text" name="r25c5" value={{user_players[24][4]}} /></td>
         </tr>   
         </table>
-        <p><input type = "submit" value = "submit" /></p>
+        <h4>Choose your Model</h4>
+        <Button type = "submit" name = "submit" value="VIF">VIF</Button>
+         <Button type = "submit" name = "submit" value="KCross">KCross</Button>
+         <br>
+        <!-- <p><input type = "submit" value = "submit" /></p> -->
     </form>
     
         
@@ -526,7 +530,6 @@ $(document).ready(function(){
     <li class="list-group-item"><center>Rebounds: {{ team_stats[2] }}</center></li>
   </ul>
   </div>
-  <Button type = 'button'> Calculate new Team Statistics </Button>
 </body>
 </html>
 {% endblock content %}

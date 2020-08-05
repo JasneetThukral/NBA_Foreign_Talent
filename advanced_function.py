@@ -10,10 +10,10 @@ import csv
 from fantasybasketball import app, mysql
 verifyAttributes = []
 
-def simulation(typeModel):
+def simulation(typeModel, pIDs):
     #TODO: Front End: Give all of the player IDs that exists in team roster when the user clicks delete
         #This is hardcoded right now below for testing purposes --> These are 3 player Ids (first 2 from NBA Team (GSW), last one from Euro or Greek League(AEKAthens))
-    currentPlayerIds = [625, 639, 116]
+    currentPlayerIds = pIDs
 
     #TODO: Front End: check to see if toggle button is either vif
     if (typeModel == "VIF"):
@@ -92,7 +92,7 @@ def simulation(typeModel):
         firstThreeStr = ""
         firstThreeStr = ",".join(firstThreeStrConvert)
         cur_4 = mysql.connection.cursor()
-        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, P.TeamName FROM Players P WHERE P.PlayerID IN (" + firstThreeStr + ")"
+        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName,S.Points,S.Assists,S.Rebounds FROM Players P natural join Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
         output_four = cur_4.execute(top3PlayersQuery)
         top3Players = cur_4.fetchall()
         return top3Players
@@ -177,7 +177,7 @@ def simulation(typeModel):
         firstThreeStr = ""
         firstThreeStr = ",".join(firstThreeStrConvert)
         cur_4 = mysql.connection.cursor()
-        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
+        top3PlayersQuery = "SELECT P.PlayerId, P.PlayerName,S.Points,S.Assists,S.Rebounds FROM Players P natural join Statistics S WHERE P.PlayerID IN (" + firstThreeStr + ")"
         output_four = cur_4.execute(top3PlayersQuery)
         top3Players = cur_4.fetchall()
         print(top3Players)

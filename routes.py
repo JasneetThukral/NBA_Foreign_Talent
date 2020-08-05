@@ -26,40 +26,13 @@ def displayabout():
 
 @app.route('/home', methods=['GET', 'POST'])
 def displayhome():
+    
+
     # Change later to display specific scout's team's information
     global loggedin
     if loggedin:
-        # Team Roster
-        ros_cur = mysql.connection.cursor()
-        ros_cur.execute('''SELECT P.PlayerID, P.PlayerName, S.Points,S.Assists,S.Rebounds 
-                        FROM Scouts Sc
-                        JOIN Teams T ON (Sc.Team = T.TeamName)
-                        JOIN Players P ON (T.TeamName = P.TeamName)
-                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)
-                        ORDER BY Points DESC, Assists DESC, Rebounds DESC''')
-        players = ros_cur.fetchall()
-        players_holder = []
-        print(players)
-        print("\n")
-
-        #filter out excess ids
-        
-        id_checker = {}
-        for i in range(25):
-            players_holder.append([0,"","", 0.0, 0.0, 0.0])
-
-        # for i in range(len(players)):
-        #     players_holder.insert(i, row)
-        print(players_holder)
-        
-        
-        for row in players:
-            if int(row[0]) not in id_checker:
-                players_holder.append([int(row[0]), str(row[1]), float(row[2]),float(row[3]),float(row[4])])
-            id_checker[row[0]] = 1
-
-        # Team Statistics
-        #Check to see 
+        arrPlayerIds = []
+        sim_arr = [[0,"",0.0,0.0,0.0],[0,"",0.0,0.0,0.0],[0,"",0.0,0.0,0.0]]
         stat_cur = mysql.connection.cursor()
         stat_cur.execute('''SELECT AVG(S.Points) AS Points, AVG(S.Assists) AS Assists, AVG(S.Rebounds) AS Rebounds
                         FROM Scouts Sc JOIN Teams T ON (Sc.Team = T.TeamName)
@@ -72,6 +45,58 @@ def displayhome():
             stats_cur.append(round(float(row[0]),2))
             stats_cur.append(round(float(row[1]),2))
             stats_cur.append(round(float(row[2]),2))
+        if request.method == 'POST':
+            arrPlayerIds.clear()
+            for x in range(1,26):
+                place = ""
+                place = "r" + str(x) + "c1"
+                arrPlayerIds.append(request.form[place])
+            temp = []
+            for id in arrPlayerIds:
+                if id != '0':
+                    temp.append(id)
+            arrPlayerIds = temp
+            model = ""
+            if request.form['submit'] == 'KCross':
+                model = "KCross"
+            elif request.form['submit'] == 'VIF':
+                model = "VIF"
+            sim = simulation(model, arrPlayerIds)
+            sim_arr = [list(x) for x in sim]
+            strPlayerIds = [str(x) for x in arrPlayerIds]
+            currentPlayerIdsStr = ""
+            currentPlayerIdsStr = ','.join(strPlayerIds)
+            new_stat_cur = mysql.connection.cursor()
+            new_stat_query = "SELECT AVG(S.Points) AS Points, AVG(S.Assists) AS Assists, AVG(S.Rebounds) AS Rebounds FROM Players P NATURAL JOIN Statistics S WHERE P.PlayerID IN (" + currentPlayerIdsStr + ")"
+            new_stat_cur.execute(new_stat_query)
+            result_new_stat = new_stat_cur.fetchall()
+            print(result_new_stat)
+            stats_cur = result_new_stat[0]
+            
+
+
+        print(sim_arr)
+        # Team Roster
+        ros_cur = mysql.connection.cursor()
+        ros_cur.execute('''SELECT DISTINCT(P.PlayerID), P.PlayerName, S.Points,S.Assists,S.Rebounds 
+                        FROM Scouts Sc
+                        JOIN Teams T ON (Sc.Team = T.TeamName)
+                        JOIN Players P ON (T.TeamName = P.TeamName)
+                        JOIN Statistics S ON (P.PlayerID = S.PlayerID)
+                        ORDER BY Points DESC, Assists DESC, Rebounds DESC''')
+        players = ros_cur.fetchall()
+        players_holder = []
+        lengthPlayers = len(players)
+
+        for row in players:
+            players_holder.append([int(row[0]), str(row[1]), float(row[2]),float(row[3]),float(row[4])])
+        fillLength = 25 - len(players)
+        for x in range(fillLength):
+            players_holder.append([0,"Insert Name",0.0, 0.0, 0.0])
+    
+        # Team Statistics
+        #Check to see 
+       
 
         # Recommendations
         # Check to see if button from front end has been clicked to run simulation(machine learning algo) here
@@ -86,14 +111,20 @@ def displayhome():
         #   machineLearning()
         
         # Decide which model user selects
-        model = ""
-        if request.method == 'POST':
-            if request.form['submit_button'] == 'KCross':
-                model = "KCross"
-            elif request.form['submit_button'] == 'VIF':
-                model = "VIF"
+        # print("Outside Function")
+        # model = "VIF"
+        # if request.method == 'POST':
+        #     print("Came Function")
+        #     if request.form['submit_button'] == 'KCross':
+        #         print("KCross")
+        #         model = "KCross"
+        #         simulation(model, arrPlayerIds)
+        #     elif request.form['submit_button'] == 'VIF':
+        #         print("VIF")
+        #         model = "VIF"
+        #         simulation(model, arrPlayerIds)
         
-        return render_template('home.html', user_players=players_holder, team_stats=stats_cur)
+        return render_template('home.html', user_players=players_holder, team_stats=stats_cur,sim_players = sim_arr)
     else:
         return "<h1> Log in to see your user data. </h1>"
 
