@@ -18,7 +18,7 @@ loggedin = False
 @app.route('/crud', methods=['GET', 'POST'])
 def crud():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Players")
+    cur.execute("SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S")
     output = cur.fetchall()
     if request.method == 'POST':
         if request.form['submit'] == 'add':
@@ -60,37 +60,38 @@ def crud():
             f = request.form["Min_Weight_Search"]
             g = request.form["Max_Weight_Search"]
 
-            query = "SELECT * FROM Players WHERE PlayerName LIKE '%" + str(a) + "%'"
+            query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE PlayerName LIKE '%" + str(a) + "%'"
             if b:
-                query = "SELECT * FROM Players NATURAL JOIN Teams WHERE Players.TeamName = '" + str(b) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P NATURAL JOIN Statistics S JOIN Teams T ON (P.TeamName = T.TeamName) WHERE P.TeamName = '" + str(b) + "'"
             if a and b:
-                query = "SELECT * FROM Players NATURAL JOIN Teams WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P NATURAL JOIN Statistics S JOIN Teams T ON (P.TeamName = T.TeamName) WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
 
             if c and (a or b):
                 query += " AND Positions = '" + str(c) + "'"
             elif c:
-                query = "SELECT * FROM Players WHERE Positions = '" + str(c) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Positions = '" + str(c) + "'"
 
             if d and (a or b or c):
                 query += " AND Height >= " + d
             elif d:
-                query = "SELECT * FROM Players WHERE Height >= " + d
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height >= " + d
 
             if e and (a or b or c or d):
                 query += " AND Height <= " + e
             elif e:
-                query = "SELECT * FROM Players WHERE Height <= " + e
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height <= " + e
 
             if f and (a or b or c or d or e):
                 query += " AND Weight >= " + f
             elif f:
-                query = "SELECT * FROM Players WHERE Weight >= " + f
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Weight >= " + f
 
             if g and (a or b or c or d or e or f):
                 query += " AND Height <= " + g
             elif g:
-                query = "SELECT * FROM Players WHERE Height <= " + g
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds FROM Players P NATURAL JOIN Statistics S WHERE Height <= " + g
 
+            query += " ORDER BY Points DESC, Assists DESC, Rebounds DESC"
             cur.execute(query)
             output = cur.fetchall()
         # cur.close()
