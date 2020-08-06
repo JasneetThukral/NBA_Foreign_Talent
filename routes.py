@@ -6,7 +6,6 @@ from fantasybasketball.advanced_function import simulation,checkingToDropVariabl
 import pandas as pd
 import itertools
 import numpy as np
-from patsy import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from statsmodels.tools.tools import add_constant
 from sklearn.linear_model import LinearRegression
@@ -76,7 +75,7 @@ def crud():
             if b:
                 query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) JOIN Teams T ON (P.TeamName = T.TeamName) WHERE P.TeamName = '" + str(b) + "'"
             if a and b:
-                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) JOIN Teams T ON (P.TeamName = T.TeamName) WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND Players.TeamName = '" + str(b) + "'"
+                query = "SELECT P.PlayerID, P.PlayerName, P.TeamName, P.Positions, P.Height, P.Weight, S.Points, S.Assists, S.Rebounds, T.Wins, T.Loss FROM Players P LEFT JOIN Statistics S ON (P.PlayerID = S.PlayerID) JOIN Teams T ON (P.TeamName = T.TeamName) WHERE PlayerName LIKE '%" + str(a) + "%'" + "AND P.TeamName = '" + str(b) + "'"
 
             if c and (a or b):
                 query += " AND Positions = '" + str(c) + "'"
@@ -129,8 +128,6 @@ def displayabout():
 
 @app.route('/home', methods=['GET', 'POST'])
 def displayhome():
-
-
     # Change later to display specific scout's team's information
     global loggedin
     if loggedin:
