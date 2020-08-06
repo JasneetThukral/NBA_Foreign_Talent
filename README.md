@@ -1,5 +1,7 @@
 # Fantasy Basketball
 
+Demo: https://www.youtube.com/watch?v=rl-s46nS0CQ
+
 Developer Instructions:
 
 Flask:
